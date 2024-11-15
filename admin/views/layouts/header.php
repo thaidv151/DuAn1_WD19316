@@ -16,4 +16,4 @@
 </style>
 
 <body >
-<div style="max-width:1286px; width:1286px">
+<div style="max-width:1286px; width:1286px;">
