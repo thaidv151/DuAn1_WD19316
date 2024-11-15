@@ -33,7 +33,7 @@
                     <div class="collapse" id="submenu2">
                         <ul class="nav flex-column ms-3">
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Danh sách sản phẩm</a>
+                                <a class="nav-link text-white" href="<?= BASE_URL_ADMIN . '?act=list-product' ?>">Danh sách sản phẩm</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="<?= BASE_URL_ADMIN . '?act=add-product' ?>">Thêm sản phẩm</a>

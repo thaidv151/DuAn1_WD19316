@@ -28,4 +28,5 @@ match ($act) {
     'add-product' => (new adminProductController())->addProduct(),
     // Xử lý post thêm sản phẩm
     'post-add-product' => (new adminProductController())->postAddProduct(),
+    'list-product' => (new adminProductController())->listProduct(),
 };
