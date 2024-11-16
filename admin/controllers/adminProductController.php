@@ -20,7 +20,7 @@ class adminProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $albums = $_FILES['albums'] ?? '';
-            debug($albums);
+
             $product_name = $_POST['product_name'] ?? '';
             $price = $_POST['price'] ?? '';
             $color = $_POST['color'] ?? '';
@@ -102,7 +102,7 @@ class adminProductController
                 if ($success) {
 
                     foreach ($categories as $key => $value) { // Thực hiện thêm danh mục cho sản phẩm
-                        $this->modelProduct->addCategories($success, $value);
+                        $this->modelProduct->insertCategory($success, $value);
                     };
 
 
@@ -163,7 +163,242 @@ class adminProductController
     }
     public function listProduct()
     {
+
+        $listProducts = [];
+        $products = $this->modelProduct->getAllProduct();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            foreach ($products as $key => $item) {
+                if (strpos(strtolower($item['product_name']), strtolower($_POST['inpSearch'])) !== false) {
+                    $products = [$item];
+                    break;
+                }
+            }
+        } else {
+            $products = $this->modelProduct->getAllProduct();
+        }
+
+        foreach ($products as $key => $product) {
+            $categories = $this->modelProduct->getCategoryById($product['id']);
+            $getImageCategory = $this->modelProduct->getImageByProductId($product['id']);
+            $listProducts[] = [
+                'id' => $product['id'],
+                'product_name' => $product['product_name'],
+                'view' => $product['view'],
+                'promotion_price' => $product['promotion_price'],
+                'categories' => $categories,
+                'status' => $product['status'],
+                'thumbnail_variant' => $getImageCategory['thumbnail_variant'],
+            ];
+        }
+
         require './views/product/listProduct.php';
-        $listPoduct = $this->modelProduct->getAllProduct();
+        delteSessionError();
+    }
+    public function editStatusProduct()
+    {
+        $id = $_GET['id'];
+        $statusProduct = $this->modelProduct->getProductById($id);
+        if ($statusProduct['status'] === 1) {
+            $changeStatus = 0;
+        } else {
+            $changeStatus = 1;
+        }
+        $success = $this->modelProduct->editStatusById($id, $changeStatus);
+        if ($success) {
+            $_SESSION['success'] = 'Thay đổi trạng thái thành công';
+            header('location:' . BASE_URL_ADMIN . '?act=list-product');
+            exit();
+        } else {
+            $_SESSION['success'] = 'Thay đổi trạng thái thất bại';
+            header('location:' . BASE_URL_ADMIN . '?act=list-product');
+            exit();
+        }
+    }
+    public function formEditProduct()
+    {
+        $product_id = $_GET['id'];
+
+        $product = $this->modelProduct->getProductById($product_id);
+        $listCategories = $this->modelProduct->getAllCategories();
+        $categories = $this->modelProduct->getCategoryById($product['id']); // lấy ra id danh mục của sản phẩm        
+
+        $listVariantById = $this->modelProduct->getVariantById($product_id);
+
+        $listVariants = [];
+
+        foreach ($listVariantById as $key => $variant) {
+
+            $liseSizeByVariantId[] = $this->modelProduct->getListSizeByVariantId($variant['id']);
+            $listAlbumByVariantId[] = $this->modelProduct->getlistAlbumByVariantId($variant['id']);
+
+
+            $listVariants[] = [
+                'id' => $variant['id'],
+                'product_id' => $variant['product_id'],
+                'color' => $variant['color'],
+                'thumbnail_variant' => $variant['thumbnail_variant'],
+                'variant_album' => $listAlbumByVariantId[$key],
+                'list_size' => $liseSizeByVariantId[$key],
+            ];
+        }
+        require_once './views/product/formEditProduct.php';
+        delteSessionError();
+    }
+    public function postEditProduct()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $product_id = $_GET['id'];
+
+            $product_name = $_POST['product_name'] ?? '';
+
+            $price = $_POST['price'] ?? '';
+
+            $promotion_price = $_POST['promotion_price'] ?? '';
+            $product_description = $_POST['product_description'] ?? '';
+            $categories = $_POST['categories'] ?? ''; // mảng danh mục của sản phẩm
+
+
+            $error = [];
+
+            if (empty($product_name)) {
+                $error['product_name'] = 'Tên sản phẩm không để trống !';
+            }
+
+
+            if (empty($price)) {
+                $error['price'] = 'Giá sản phẩm không để trống !';
+            }
+            if (empty($promotion_price)) {
+                $error['promotion_price'] = 'Giá khuyến mãi không để trống !';
+            } else if (!is_numeric($price)) {
+                $error['price'] = 'Giá sản phẩm phải là số !';
+            }
+            if (empty($product_description)) {
+                $error['product_description'] = 'Mô tả không để trống !';
+            } else if (!is_numeric($promotion_price)) {
+                $error['promotion_price'] = 'Giá khuyến mãi phải là số !';
+            }
+
+
+
+            if (empty($categories)) {
+                $error['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
+            }
+            $_SESSION['error'] = $error;
+            if (empty($error)) {
+
+                $this->modelProduct->editProduct($product_id, $product_name, $product_description, $price, $promotion_price);
+
+                // Thực hiện xoá danh mục cũ
+                $success =  $this->modelProduct->deleteCategoriesById($product_id);
+                if ($success) {
+                    foreach ($categories as $key => $category_id) {
+                        $this->modelProduct->insertCategory($product_id, $category_id);
+                    }
+                }
+                $_SESSION['success'] = 'Cập nhật thành công';
+                header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            } else {
+
+                $_SESSION['flash'] = true;
+                header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            }
+        }
+    }
+    public function postEditVariant()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
+            $product_id = $_POST['product_id'] ?? '';
+
+            $variant_id = $_GET['id'] ?? '';
+            $color = $_POST['color'] ?? '';
+            $quantitys = $_POST['quantitys'] ?? '';
+            $size_id = $_POST['size_id'] ?? '';
+            $file = $_FILES['thumbnail_variant'] ?? '';
+            $oldImg =  $_POST['oldImg'] ?? '';
+
+            $arrDelete = $_POST['arrDelete'] ?? '';
+            $linkArrDelete = $_POST['linkArrDelete'] ?? '';
+
+            $albums  = $_FILES['albums'] ?? '';
+
+            if (!empty($arrDelete)) {
+                
+                foreach ($arrDelete as $key => $item) {
+                    $link_image = $this->modelProduct->getLinkImageById($item);
+                    deleteFile($link_image['link_image']);
+                    if(is_numeric($item)){
+                        $this->modelProduct->deleteItemAlbums($item);
+                       
+                    }
+                    
+                }
+            }
+         
+       
+
+
+            if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+                if (!empty($oldImg)) {
+                    deleteFile($oldImg);
+                }
+                $newImg = uploadFile($file, './uploads/');
+            } else {
+
+                $newImg = $oldImg;
+            }
+            $error = [];
+
+
+            $sum = array_reduce($quantitys, function ($total, $num) {
+                return $total + $num;
+            }, 0);
+
+            if ($sum <= 0) {
+                $error['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
+            }
+
+            if ($color === '') {
+                $error['color'] = 'Màu sản phẩm không để trống !';
+            }
+
+            $_SESSION['error'] = $error;
+            if (empty($error)) {
+
+                $results =  $this->modelProduct->updateVariant($variant_id, $newImg, $color);
+               
+                if (!empty($albums['name'][0])) {
+                    foreach ($albums['name'] as $key => $image) {
+
+                        $fileImg = [
+                            'name' => $albums['name'][$key],
+                            'type' => $albums['type'][$key],
+                            'tmp_name' => $albums['tmp_name'][$key],
+                            'error' => $albums['error'][$key],
+                            'size' => $albums['size'][$key],
+                        ];
+                        $newItemAlbum = uploadFile($fileImg, './uploads/');
+                        $this->modelProduct->insertItemAlbumVariant($variant_id, $newItemAlbum);
+                    }
+                }
+                foreach ($size_id as $key => $value) {
+                    $this->modelProduct->updateSizeVariant($variant_id, $size_id[$key], $quantitys[$key]);
+                }
+
+                $_SESSION['success'] = 'Cập nhật thành công';
+                header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            } else {
+
+                $_SESSION['flash'] = true;
+                header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            }
+        }
     }
 }
