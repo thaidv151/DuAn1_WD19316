@@ -23,7 +23,7 @@ require_once './views/layouts/sidebar.php';
 
         <div class="form-group col-6">
             <label>Giá sản phẩm</label>
-            <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
+            <input  class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
             <?php if (isset($_SESSION['error']['price'])) { ?>
                 <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
             <?php } ?>
@@ -33,7 +33,7 @@ require_once './views/layouts/sidebar.php';
                 <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
             </label>
-            <input class="form-control" type="number" placeholder="Giá khuyến mãi" name="promotion_price">
+            <input  class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
             <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
                 <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
             <?php } ?>
@@ -70,8 +70,8 @@ require_once './views/layouts/sidebar.php';
             <label>
                 Danh mục <i style="font-weight: 600;">(chọn danh mục theo đúng sản phẩm)</i>
                 <?php if (isset($_SESSION['error']['categories'])) { ?>
-                <p class="text-danger"> <?= $_SESSION['error']['categories'] ?> </p>
-            <?php } ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['categories'] ?> </p>
+                <?php } ?>
             </label>
             <div class="row">
                 <?php foreach ($listCategories as $key => $category): ?>
@@ -160,5 +160,6 @@ require_once './views/layouts/sidebar.php';
 
 
     })
+    
    
 </script>

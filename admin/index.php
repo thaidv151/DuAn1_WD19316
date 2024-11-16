@@ -28,5 +28,16 @@ match ($act) {
     'add-product' => (new adminProductController())->addProduct(),
     // Xử lý post thêm sản phẩm
     'post-add-product' => (new adminProductController())->postAddProduct(),
+    // Danh sách sản phẩm
     'list-product' => (new adminProductController())->listProduct(),
+    // Sửa trạng thái của sản phẩm
+    'edit-status' => (new adminProductController())->editStatusProduct(),
+    // Sửa sản phẩm
+    'edit-product' => (new adminProductController())->formEditProduct(),
+
+    'post-edit-product' => (new adminProductController())->postEditProduct(),
+
+    'post-edit-variant' => (new adminProductController())->postEditVariant(),
+
+    'delete-product' => (new adminProductController())->deleteProduct(),
 };
