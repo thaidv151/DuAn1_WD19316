@@ -8,10 +8,12 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 // Require toàn bộ file Controllers
 require_once './controllers/adminController.php';
 require_once './controllers/adminProductController.php';
+require_once './controllers/AdminDanhMucController.php';
 
 // Require toàn bộ file Models
 require_once './models/adminModel.php';
 require_once './models/adminProductModel.php';
+require_once './models/AdminDanhMuc.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -21,7 +23,13 @@ $act = $_GET['act'] ?? '/';
 match ($act) {
     // Trang chủ
     '/' => (new adminController())->homeAdmin(),
-    
+
+    //danh mục
+    'danh-muc' => (new adminDanhMucController())->DanhSachDanhMuc(),
+    'from-them-danh-muc' => (new adminDanhMucController())->fromAddDanhMuc(),
+    'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
+    'xoa-danh-muc'=>(new adminDanhMucController())->deleteDanhMuc(),
+   
 
     // Quản lý sản phẩm
     // route thêm sản phẩm
@@ -40,4 +48,5 @@ match ($act) {
     'post-edit-variant' => (new adminProductController())->postEditVariant(),
 
     'delete-product' => (new adminProductController())->deleteProduct(),
+
 };

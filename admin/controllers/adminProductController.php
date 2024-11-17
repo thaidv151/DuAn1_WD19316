@@ -183,7 +183,7 @@ class adminProductController
         } else {
             $products = $this->modelProduct->getAllProduct();
         }
-        // debug($products);
+        
         foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
             $categories = $this->modelProduct->getCategoryById($product['id']);
             $variants = $this->modelProduct->getVariantById($product['id']);
