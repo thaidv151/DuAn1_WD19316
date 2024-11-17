@@ -68,7 +68,11 @@ class adminProductController
             foreach ($thumbnails['name'] as $key => $value) {
                 if ($thumbnails['error'][$key] !== 0) {
                     $error['thumbnail'] = 'Không để trống hình ảnh !';
+                }elseif ($thumbnails['size'] >= 2500000) {
+                    $error['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                    
                 }
+                debug($error['thumbnail']);
             }
 
             if (!is_numeric($price)) {
@@ -150,7 +154,7 @@ class adminProductController
                         }
                     };
                     // đến số biến thể (variant) đc tạo thành
-                    header('location:' . BASE_URL_ADMIN . 'listProuduct.php');
+                    header('location:' . BASE_URL_ADMIN . '?act=list-product');
                     exit();
                 }
             } else {
@@ -166,23 +170,40 @@ class adminProductController
 
         $listProducts = [];
         $products = $this->modelProduct->getAllProduct();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $resultProducts = [];
             foreach ($products as $key => $item) {
+
                 if (strpos(strtolower($item['product_name']), strtolower($_POST['inpSearch'])) !== false) {
-                    $products = [$item];
-                    break;
+
+                    $resultProducts[] = $item;
                 }
             }
         } else {
             $products = $this->modelProduct->getAllProduct();
         }
-
-        foreach ($products as $key => $product) {
+        
+        foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
             $categories = $this->modelProduct->getCategoryById($product['id']);
+            $variants = $this->modelProduct->getVariantById($product['id']);
+            foreach ($variants as $key => $variant) {
+                $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
+            }
+           
+            $totalQuantity = array_reduce($resultQuantityById, function($total , $num){  
+                return $total + $num['total'];
+            }, 0);
+
+          
+
+          
+            
             $getImageCategory = $this->modelProduct->getImageByProductId($product['id']);
             $listProducts[] = [
                 'id' => $product['id'],
                 'product_name' => $product['product_name'],
+                'total_quantity' => $totalQuantity,
                 'view' => $product['view'],
                 'promotion_price' => $product['promotion_price'],
                 'categories' => $categories,
@@ -217,8 +238,14 @@ class adminProductController
     public function formEditProduct()
     {
         $product_id = $_GET['id'];
-
+        
         $product = $this->modelProduct->getProductById($product_id);
+        
+        if (!$product)
+        {
+            header('location: ' . BASE_URL_ADMIN . '?act=list-product');
+            exit();
+        }
         $listCategories = $this->modelProduct->getAllCategories();
         $categories = $this->modelProduct->getCategoryById($product['id']); // lấy ra id danh mục của sản phẩm        
 
@@ -328,19 +355,17 @@ class adminProductController
             $albums  = $_FILES['albums'] ?? '';
 
             if (!empty($arrDelete)) {
-                
+
                 foreach ($arrDelete as $key => $item) {
                     $link_image = $this->modelProduct->getLinkImageById($item);
                     deleteFile($link_image['link_image']);
-                    if(is_numeric($item)){
+                    if (is_numeric($item)) {
                         $this->modelProduct->deleteItemAlbums($item);
-                       
                     }
-                    
                 }
             }
-         
-       
+
+
 
 
             if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
@@ -354,11 +379,15 @@ class adminProductController
             }
             $error = [];
 
+            $sum = 0;
+           foreach ($quantitys as $key =>   $value) {
+                if($value === ''){
+                    $value = 0;
+                }
+                $sum += (int)$value;
+           }
 
-            $sum = array_reduce($quantitys, function ($total, $num) {
-                return $total + $num;
-            }, 0);
-
+        
             if ($sum <= 0) {
                 $error['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
             }
@@ -371,7 +400,7 @@ class adminProductController
             if (empty($error)) {
 
                 $results =  $this->modelProduct->updateVariant($variant_id, $newImg, $color);
-               
+
                 if (!empty($albums['name'][0])) {
                     foreach ($albums['name'] as $key => $image) {
 
@@ -400,5 +429,9 @@ class adminProductController
                 exit();
             }
         }
+    }
+    public function deleteProduct()
+    {
+        $product_id = $_GET['id'];
     }
 }

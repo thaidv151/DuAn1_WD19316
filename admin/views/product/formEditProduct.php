@@ -35,7 +35,7 @@ require_once './views/layouts/sidebar.php';
                     <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
                 </label>
-                <input value="<?= $product['promotion_price'] ?>" class="form-control" type="number" placeholder="Giá khuyến mãi" name="promotion_price">
+                <input value="<?= $product['promotion_price']?>" class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
                 <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
                 <?php } ?>
@@ -73,7 +73,7 @@ require_once './views/layouts/sidebar.php';
 
             <div style="margin-top: 10px;" class="form-group col-12 row">
                 <div class="col-10"></div>
-                <button id="submit" class="btn btn-primary col-2" type="submit">Cập nhật</button>
+                <button onclick="return confirm('Bạn có muốn có muốn cập nhật sản phẩm')" id="submit" class="btn btn-primary col-2" type="submit">Cập nhật</button>
             </div>
 
         </form>
@@ -115,7 +115,7 @@ require_once './views/layouts/sidebar.php';
                             </div>
                             <?php if (!empty($variant['variant_album'])) { ?>
                                 <div class="col-1">
-                                    <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
+                                    <button onclick="return confirm('Bạn xác nhận xoá hình ảnh sản phẩm')" class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
                                 </div>
                             <?php } ?>
 
@@ -143,14 +143,14 @@ require_once './views/layouts/sidebar.php';
                         <div class="col-12 row">
                             <?php foreach ($variant['list_size'] as $key => $size): ?>
                                 <label class="col-3">Kích thước <?= $size['name_size'] ?> :
-                                    <input min="0" value="<?= $size['quantity_size'] ?>" class="form-control" type="number" name="quantitys[]" placeholder="Số lượng"></label>
+                                    <input min="0" max="10000" value="<?= number_format($size['quantity_size']) ?>" class="form-control" type="text" name="quantitys[]" placeholder="Số lượng"></label>
                                 <input type="hidden" name="size_id[]" value="<?= $size['size_id'] ?>">
                             <?php endforeach; ?>
                         </div>
                     </div>
                     <div style="margin-top: 10px;" class="form-group col-12 row">
                         <div class="col-10"></div>
-                        <button id="submit" class="btn btn-primary col-2" type="submit">Cập nhật</button>
+                        <button onclick="return confirm('Bạn có muốn có muốn cập nhật sản phẩm')" id="submit" class="btn btn-primary col-2" type="submit">Cập nhật</button>
                     </div>
             </div>
 

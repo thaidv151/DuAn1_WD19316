@@ -44,25 +44,11 @@ function delteSessionError(){
     if(isset($_SESSION['success'])){
         unset($_SESSION['success']);
     }
+
 }
 function deleteFile($file){
     $path = PATH_ROOT . $file;
     if(file_exists($path)){
         unlink($path);
-    }
-}
-function upLoadAlbums($files, $folder){
-    $path = [];
-    debug($files);
-    foreach($files as $key => $file){
-        
-        // $pathStorage = $folder .time() . rand(100000000, 100000000000000) . $file['name'][$key];
-        // $from = $file['tmp_name'][$key];
-        // $to = PATH_ROOT . $pathStorage;
-        // if(move_uploaded_file($from, $to)){
-        //     return $path[] = $pathStorage;
-        // }else{
-        //     return $path[] = null;
-        // }
     }
 }

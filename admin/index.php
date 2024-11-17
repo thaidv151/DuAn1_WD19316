@@ -46,4 +46,7 @@ match ($act) {
     'post-edit-product' => (new adminProductController())->postEditProduct(),
 
     'post-edit-variant' => (new adminProductController())->postEditVariant(),
+
+    'delete-product' => (new adminProductController())->deleteProduct(),
+
 };

@@ -13,16 +13,17 @@ require_once './views/layouts/sidebar.php';
   <div class="col-12 row">
 
     <div class="search ">
-      <form action="<?= BASE_URL_ADMIN . '?act=list-product'?>" class="row form-group col-12" method="POST">
+
+      <form action="<?= BASE_URL_ADMIN . '?act=list-product' ?>" class="row form-group col-12" method="POST">
         <div class="col-7"></div>
         <div class="col-4">
-          <input class="form col-9 p-1 form-control" type="text" name="inpSearch"  placeholder="Tìm kiếm sản phẩm">
-         
+          <input class="form col-9 p-1 form-control" type="text" name="inpSearch" placeholder="Tìm kiếm sản phẩm">
+
         </div>
         <div class="col-1 mt-1">
           <button type="submit" class="btn btn-primary form-control "> <i class="bi bi-search-heart"></i></button>
         </div>
-       
+
       </form>
     </div>
   </div>
@@ -33,7 +34,9 @@ require_once './views/layouts/sidebar.php';
     <thead>
       <tr class="col-12">
         <th class="col-1">STT</th>
-        <th class="col-3">Tên sản phẩm</th>
+
+        <th class="col-2">Tên sản phẩm</th>
+        <th class="col-1">Số lượng</th>
         <th class="col-1">Giá</th>
         <th class="col-1">Lượt xem</th>
         <th class="col-1">Hình ảnh</th>
@@ -51,14 +54,19 @@ require_once './views/layouts/sidebar.php';
           <td>
             <?= $key + 1 ?>
           </td>
-          <td class="tdName">
+
+          <td>
             <?= $product['product_name'] ?>
           </td>
           <td>
-            <?= $product['promotion_price'] ?>
+            <?= $product['total_quantity'] ?>
           </td>
           <td>
-            <?= $product['view'] ?>
+            <?= number_format($product['promotion_price']) ?>
+          </td>
+          <td>
+            <?= number_format($product['view']) ?>
+
           </td>
           <td>
             <img src=" .<?= $product['thumbnail_variant'] ?>" alt=""
@@ -74,13 +82,25 @@ require_once './views/layouts/sidebar.php';
             <?= $product['status'] === 1 ? 'Hiện' : 'Ẩn' ?>
           </td>
           <td>
-            <button class="btn btn-warning" title="Sửa"><a class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-product&id=' . $product['id'] ?>"> <i class="bi bi-gear-wide-connected"></i></a></button>
-            <button class="btn border" title="Ẩn/hiển">
-              <a class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-status&id=' . $product['id'] ?>">
+
+
+            <a style="text-decoration: none;" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-product&id=' . $product['id'] ?>">
+              <button class="btn btn-warning" title="Sửa">
+                <i class="bi bi-gear-wide-connected"></i>
+              </button>
+            </a>
+
+
+            <a style="text-decoration: none;" onclick="return confirm('Bạn có muốn thay đổi trạng thái sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-status&id=' . $product['id'] ?>">
+              <button class="btn border" title="Ẩn/hiển">
                 <?php echo $product['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
-              </a>
-            </button>
-            <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
+              </button>
+            </a>
+
+            <a style="text-decoration: none;" onclick="return confirm('Bạn có xác nhận xoá sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=delete-product&id=' . $product['id'] ?>">
+              <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
+            </a>
+
           </td>
 
         </tr>

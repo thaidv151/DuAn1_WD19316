@@ -1,5 +1,6 @@
 <?php
-class adminProductModel{
+class adminProductModel
+{
     public $conn;
     public function __construct()
     {
@@ -123,6 +124,18 @@ class adminProductModel{
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllQuantityById($id)
+    {
+        try {
+            $sql = "SELECT SUM(quantity_size) as total FROM size_details
+             WHERE variant_id = '$id'";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetch();
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -309,16 +322,4 @@ class adminProductModel{
             echo $e->getMessage();
         }
     }
-
-    // public function getAllCategories(){
-    //     try {
-    //         $sql = "SELECT * FROM categories";
-    //         $stmt =$this->conn->prepare($sql);
-    //         $stmt->execute();
-    //         return $stmt->fetchAll();
-
-    //     } catch (Exception $e) {
-    //         echo "Error".$e->getMessage();
-    //     }
-    // }
 }
