@@ -35,7 +35,7 @@ require_once './views/layouts/sidebar.php';
                     <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
                 </label>
-                <input value="<?= $product['promotion_price']?>" class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
+                <input value="<?= $product['promotion_price'] ?>" class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
                 <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
                 <?php } ?>
@@ -105,11 +105,21 @@ require_once './views/layouts/sidebar.php';
 
                         <div class="col-12 row">
                             <label for="" class="me-4 ">Albums của biến thể: </label>
-                            <div class="col-11">
+                            <?php if (isset($_SESSION['error']['albums'])) { ?>
+                                <p class="text-danger"> <?= $_SESSION['error']['albums'] ?> </p>
+                            <?php } ?>
+                            <div class="col-11 row">
                                 <?php foreach ($variant['variant_album'] as $key => $item): ?>
-                                    <input type="checkbox" name="arrDelete[]" id="" value="<?= $item['id'] ?>">
-                                   
-                                    <img width="100px" src="<?='.' . $item['link_image'] ?>" alt="" onerror="this.onerror=null; this.src= '../uploads/logo.png'" ;>
+
+
+
+                                    <div class="col-2 card ms-3">
+                                        <div class="card-image-top d-flex">
+                                            <img  width="100px" src="<?= '.' . $item['link_image'] ?>" alt="" onerror="this.onerror=null; this.src= '../uploads/logo.png'" ;>
+                                            <input class="position-absolute top-50 end-0 translate-middle" type="checkbox" name="arrDelete[]" id="" value="<?= $item['id'] ?>">
+                                        </div>
+                                      
+                                    </div>
                                 <?php endforeach; ?>
 
                             </div>
