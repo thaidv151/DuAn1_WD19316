@@ -17,10 +17,10 @@
                     <div class="collapse" id="submenu1">
                         <ul class="nav flex-column ms-3">
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Danh sách danh mục</a>
+                            <a class="nav-link text-white" href=<?= BASE_URL_ADMIN . '?act=danh-muc' ?>>Danh sách danh mục</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Thêm danh mục</a>
+                            <a class="nav-link text-white" href=<?= BASE_URL_ADMIN . '?act=from-them-danh-muc' ?>>Thêm danh mục</a>
                             </li>
                         </ul>
                     </div>
