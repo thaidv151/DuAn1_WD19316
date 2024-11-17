@@ -23,7 +23,7 @@ require_once './views/layouts/sidebar.php';
 
         <div class="form-group col-6">
             <label>Giá sản phẩm</label>
-            <input  class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
+            <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
             <?php if (isset($_SESSION['error']['price'])) { ?>
                 <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
             <?php } ?>
@@ -33,20 +33,23 @@ require_once './views/layouts/sidebar.php';
             <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
             </label>
-            <input  class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
+            <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
             <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
                 <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
             <?php } ?>
         </div>
         <div class="form-group col-12">
-            <label>Hình ảnh đại diện</label>
+            <label>Hình ảnh đại diện ( chỉ nhận file .png, .jpg, .webp, .gif )</label>
             <input class="form-control" type="file" placeholder="Hình ảnh đại diện" name="thumbnail[]">
             <?php if (isset($_SESSION['error']['thumbnail'])) { ?>
                 <p class="text-danger"> <?= $_SESSION['error']['thumbnail'] ?> </p>
             <?php } ?>
         </div>
         <div class="form-group col-6">
-            <label>Album hình ảnh sản phẩm</label>
+            <label>Album hình ảnh sản phẩm ( chỉ nhận file .png, .jpg, .webp, .gif )</label>
+            <?php if (isset($_SESSION['error']['albums'])) { ?>
+                <p class="text-danger"> <?= $_SESSION['error']['albums'] ?> </p>
+            <?php } ?>
             <input class="form-control" type="file" placeholder="Hình ảnh đại diện" name="albums[0][]" multiple>
         </div>
         <div class="form-group col-6">
@@ -160,6 +163,4 @@ require_once './views/layouts/sidebar.php';
 
 
     })
-    
-   
 </script>
