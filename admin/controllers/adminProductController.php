@@ -210,6 +210,36 @@
                 $products = $this->modelProduct->getAllProduct();
             }
 
+        
+        foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
+            $categories = $this->modelProduct->getCategoryById($product['id']);
+            $variants = $this->modelProduct->getVariantById($product['id']);
+            foreach ($variants as $key => $variant) {
+                $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
+            }
+           
+            $totalQuantity = array_reduce($resultQuantityById, function($total , $num){  
+                return $total + $num['total'];
+            }, 0);
+
+          
+
+          
+            
+            $getImageCategory = $this->modelProduct->getImageByProductId($product['id']);
+            $listProducts[] = [
+                'id' => $product['id'],
+                'product_name' => $product['product_name'],
+                'total_quantity' => $totalQuantity,
+                'view' => $product['view'],
+                'promotion_price' => $product['promotion_price'],
+                'categories' => $categories,
+                'status' => $product['status'],
+                'thumbnail_variant' => $getImageCategory['thumbnail_variant'],
+            ];
+        }
+
+
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
                 $categories = $this->modelProduct->getCategoryById($product['id']);
                 $variants = $this->modelProduct->getVariantById($product['id']);

@@ -13,6 +13,7 @@ require_once './views/layouts/sidebar.php';
   <div class="col-12 row">
 
     <div class="search ">
+
       <form action="<?= BASE_URL_ADMIN . '?act=list-product' ?>" class="row form-group col-12" method="POST">
         <div class="col-7"></div>
         <div class="col-4">
@@ -33,6 +34,7 @@ require_once './views/layouts/sidebar.php';
     <thead>
       <tr class="col-12">
         <th class="col-1">STT</th>
+
         <th class="col-2">Tên sản phẩm</th>
         <th class="col-1">Số lượng</th>
         <th class="col-1">Giá</th>
@@ -52,6 +54,7 @@ require_once './views/layouts/sidebar.php';
           <td>
             <?= $key + 1 ?>
           </td>
+
           <td>
             <?= $product['product_name'] ?>
           </td>
@@ -63,6 +66,7 @@ require_once './views/layouts/sidebar.php';
           </td>
           <td>
             <?= number_format($product['view']) ?>
+
           </td>
           <td>
             <img src=" .<?= $product['thumbnail_variant'] ?>" alt=""
@@ -78,6 +82,7 @@ require_once './views/layouts/sidebar.php';
             <?= $product['status'] === 1 ? 'Hiện' : 'Ẩn' ?>
           </td>
           <td>
+
 
             <a style="text-decoration: none;" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-product&id=' . $product['id'] ?>">
               <button class="btn btn-warning" title="Sửa">
@@ -95,6 +100,7 @@ require_once './views/layouts/sidebar.php';
             <a style="text-decoration: none;" onclick="return confirm('Bạn có xác nhận xoá sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=delete-product&id=' . $product['id'] ?>">
               <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
             </a>
+
           </td>
 
         </tr>

@@ -3,7 +3,7 @@ require_once './views/layouts/header.php';
 require_once './views/layouts/sidebar.php';
 ?>
 
-<h3 class="alert alert-secondary">Quản lý: Sản phẩm</h3>
+<h3 class="alert alert-secondary">Quản lý: Thêm sản phẩm</h3>
 <div class="col-12 card">
 
     <h4 class=" alert title">
@@ -30,7 +30,7 @@ require_once './views/layouts/sidebar.php';
         </div>
         <div class="form-group col-6">
             <label>Giá khuyến mãi
-                <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
+            <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
             </label>
             <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">

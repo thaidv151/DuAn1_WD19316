@@ -44,6 +44,7 @@ function delteSessionError(){
     if(isset($_SESSION['success'])){
         unset($_SESSION['success']);
     }
+
 }
 function deleteFile($file){
     $path = PATH_ROOT . $file;
