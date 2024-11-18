@@ -585,7 +585,9 @@
                             'error' => $albums['error'][$num],
                             'size' => $albums['size'][$num],
                         ];
+
                         $link_image = uploadFile($file, './uploads/');
+
                         $this->modelProduct->insertItemAlbumVariant($newVaiantId, $link_image);
                     }
                     $_SESSION['success'] = 'Thêm biến thể thành công';
