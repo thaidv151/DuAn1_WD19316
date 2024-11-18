@@ -1,97 +1,173 @@
-<!-- Sidebar -->
-<div class="row flex-nowrap col-md-12 ">
-    <div class="col-auto col-xl-3 px-sm-2 px-0 bg-dark">
-        <div class="nav nav-sidebar d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-            <a href="<?= BASE_URL_ADMIN ?>" class=" d-flex align-items-center pb-3 pt-3 text-white text-decoration-none">
-                <img src="../uploads/logo.png" alt="" style="width:40px; height:40px; border-radius:50%; margin-right:20px;">
-                <span class="fs-4 d-none d-sm-inline">TNM Clothes</span>
-            </a>
-            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                <li class="nav-item ">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#submenu1" role="button" aria-expanded="false" aria-controls="submenu1">
-                        <i class="bi bi-bag-plus fs-6 text-white"></i>
-                        <span class="ms-1 d-none d-sm-inline text-white nav-link d-inline">Danh mục sản phẩm</span>
-                        <i class="bi bi-chevron-down fs-6 text-white"></i>
-                    </a>
-                    </a>
-                    <div class="collapse" id="submenu1">
-                        <ul class="nav flex-column ms-3">
-                            <li class="nav-item">
-                            <a class="nav-link text-white" href=<?= BASE_URL_ADMIN . '?act=danh-muc' ?>>Danh sách danh mục</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-white" href=<?= BASE_URL_ADMIN . '?act=from-them-danh-muc' ?>>Thêm danh mục</a>
-                            </li>
-                        </ul>
+<div class="header">
+    <div class="header-content">
+        <nav class="navbar navbar-expand">
+            <div class="collapse navbar-collapse justify-content-between">
+                <div class="header-left">
+                    <div class="dashboard_bar">
+                        Dashboard
                     </div>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#submenu2" role="button" aria-expanded="false" aria-controls="submenu2">
-                        <i class="bi bi-basket3 text-white"></i>
-                        <span style="font-size:10px" class="ms-1 d-none d-sm-inline text-white nav-link fs-6">Quản lý sản phẩm</span> <i class="bi bi-chevron-down text-white"></i></a>
-                    </a>
-                    <div class="collapse" id="submenu2">
-                        <ul class="nav flex-column ms-3">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="<?= BASE_URL_ADMIN . '?act=list-product' ?>">Danh sách sản phẩm</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="<?= BASE_URL_ADMIN . '?act=add-product' ?>">Thêm sản phẩm</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#submenu3" role="button" aria-expanded="false" aria-controls="submenu3">
-                        <i class="bi bi-check-square text-white"></i>
-                        <span style="font-size:10px" class="ms-1 d-none d-sm-inline text-white nav-link fs-6">Quản lý voucher</span> <i class="bi bi-chevron-down text-white"></i></a>
-                    </a>
-                    <div class="collapse" id="submenu3">
-                        <ul class="nav flex-column ms-3">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Danh sách voucher</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Thêm voucher</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#submenu4" role="button" aria-expanded="false" aria-controls="submenu4">
-                        <i class="bi bi-clipboard2 text-white"></i>
-                        <span style="font-size:10px" class="ms-1 d-none d-sm-inline text-white nav-link fs-6">Quản lý đơn hàng</span> <i class="bi bi-chevron-down text-white"></i></a>
-                    </a>
-                    <div class="collapse" id="submenu4">
-                        <ul class="nav flex-column ms-3">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Danh sách dơn hàng</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Thêm voucher</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                </div>
+                <ul class="navbar-nav header-right">
 
-            </ul>
-            <hr>
-            <div class="dropdown pb-4"  style="position: fixed; z-index: 10000; bottom:10px;">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                    <span class="d-none d-sm-inline mx-1">loser</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+
+                    <li class="nav-item dropdown header-profile">
+                        <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
+                            <img src="images/profile/17.jpg" width="20" alt="" />
+                            <div class="header-info">
+                                <span class="text-black">Peter Parkur</span>
+                                <p class="fs-12 mb-0">Super Admin</p>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="app-profile.html" class="dropdown-item ai-icon">
+                                <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span class="ms-2">Profile </span>
+                            </a>
+                            <a href="email-inbox.html" class="dropdown-item ai-icon">
+                                <svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span class="ms-2">Inbox </span>
+                            </a>
+                            <a href="page-login.html" class="dropdown-item ai-icon">
+                                <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                <span class="ms-2">Logout </span>
+                            </a>
+                        </div>
+                    </li>
                 </ul>
             </div>
-        </div>
+        </nav>
     </div>
-    <div class="content col-md-11  ps-4">
+</div>
+<!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+<!--**********************************
+            Sidebar start
+        ***********************************-->
+<div class="dlabnav">
+    <div class="dlabnav-scroll">
+        <ul class="metismenu" id="menu">
+            <li><a href="<?= BASE_URL_ADMIN ?>" class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-networking"></i>
+                    <span class="nav-text">Trang chủ</span>
+                </a>
+
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-television"></i>
+                    <span class="nav-text">Sản phẩm</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-product' ?>">Danh sách sản phẩm</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=add-product' ?>">Thêm sản phẩm</a></li>
+                
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-controls-3"></i>
+                    <span class="nav-text">Danh mục</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=danh-muc' ?>">Danh sách danh mục</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=form-them-danh-muc' ?>">Thêm danh mục</a></li>
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-internet"></i>
+                    <span class="nav-text">Bootstrap</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="ui-accordion.html">Accordion</a></li>
+                    <li><a href="ui-alert.html">Alert</a></li>
+                                    </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-heart"></i>
+                    <span class="nav-text">Plugins</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="uc-select2.html">Select 2</a></li>
+                    <li><a href="uc-nestable.html">Nestedable</a></li>
+                    <li><a href="uc-noui-slider.html">Noui Slider</a></li>
+                    <li><a href="uc-sweetalert.html">Sweet Alert</a></li>
+                    <li><a href="uc-toastr.html">Toastr</a></li>
+                    <li><a href="map-jqvmap.html">Jqv Map</a></li>
+                    <li><a href="uc-lightgallery.html">Light Gallery</a></li>
+                </ul>
+            </li>
+            <li><a href="widget-basic.html" class="ai-icon" aria-expanded="false">
+                    <i class="flaticon-381-settings-2"></i>
+                    <span class="nav-text">Widget</span>
+                </a>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-notepad"></i>
+                    <span class="nav-text">Forms</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="form-element.html">Form Elements</a></li>
+                    <li><a href="form-wizard.html">Wizard</a></li>
+                    <li><a href="form-editor-ckeditor.html">Form CkEditor</a></li>
+                    <li><a href="form-pickers.html">Pickers</a></li>
+                    <li><a href="form-validation-jquery.html">Jquery Validate</a></li>
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-network"></i>
+                    <span class="nav-text">Table</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
+                    <li><a href="table-datatable-basic.html">Datatable</a></li>
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-layer-1"></i>
+                    <span class="nav-text">Pages</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="page-register.html">Register</a></li>
+                    <li><a href="page-login.html">Login</a></li>
+                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Error</a>
+                        <ul aria-expanded="false">
+                            <li><a href="page-error-400.html">Error 400</a></li>
+                            <li><a href="page-error-403.html">Error 403</a></li>
+                            <li><a href="page-error-404.html">Error 404</a></li>
+                            <li><a href="page-error-500.html">Error 500</a></li>
+                            <li><a href="page-error-503.html">Error 503</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="page-lock-screen.html">Lock Screen</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</div>
+<!--**********************************
+            Sidebar end
+        ***********************************-->
+
+<!--**********************************
+            Content body start
+        ***********************************-->
+
+<!--**********************************
+            Content body end
+        ***********************************-->
 
 
+<div class="content-body">
 
-
-
-        <!-- end sidebar -->
+    <div class="container-fluid">

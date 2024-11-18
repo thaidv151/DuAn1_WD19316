@@ -19,7 +19,7 @@ class AdminDanhMucController
     }
     
     // Hiển thị form thêm danh mục mới
-    public function fromAddDanhMuc()
+    public function formThemDanhMuc()
     {
         require_once './views/danhmuc/addDanhMuc.php';
     }

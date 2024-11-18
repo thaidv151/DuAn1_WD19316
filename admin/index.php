@@ -26,7 +26,7 @@ match ($act) {
 
     //danh mục
     'danh-muc' => (new adminDanhMucController())->DanhSachDanhMuc(),
-    'from-them-danh-muc' => (new adminDanhMucController())->fromAddDanhMuc(),
+    'form-them-danh-muc' => (new adminDanhMucController())->formThemDanhMuc(),
     'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
     'xoa-danh-muc'=>(new adminDanhMucController())->deleteDanhMuc(),
    
@@ -48,5 +48,11 @@ match ($act) {
     'post-edit-variant' => (new adminProductController())->postEditVariant(),
 
     'delete-product' => (new adminProductController())->deleteProduct(),
+
+    'delete-variant' => (new adminProductController())->deleteVariant(),
+
+    'form-add-variant' => (new adminProductController())->formAddVariant(),
+
+    'post-add-variant' => (new adminProductController())->postAddVariant(),
 
 };

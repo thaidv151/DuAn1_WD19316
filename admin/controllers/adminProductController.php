@@ -65,7 +65,7 @@
                     $error['product_description'] = 'Mô tả không để trống !';
                 }
 
-                $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpg", 'image/webp'];
+                $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpeg", 'image/webp'];
 
                 foreach ($thumbnails['name'] as $key => $value) {
 
@@ -198,6 +198,7 @@
             $products = $this->modelProduct->getAllProduct();
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
                 $resultProducts = [];
                 foreach ($products as $key => $item) {
 
@@ -210,52 +211,34 @@
                 $products = $this->modelProduct->getAllProduct();
             }
 
-        
-        foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
-            $categories = $this->modelProduct->getCategoryById($product['id']);
-            $variants = $this->modelProduct->getVariantById($product['id']);
-            foreach ($variants as $key => $variant) {
-                $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
-            }
-           
-            $totalQuantity = array_reduce($resultQuantityById, function($total , $num){  
-                return $total + $num['total'];
-            }, 0);
-
-          
-
-          
-            
-            $getImageCategory = $this->modelProduct->getImageByProductId($product['id']);
-            $listProducts[] = [
-                'id' => $product['id'],
-                'product_name' => $product['product_name'],
-                'total_quantity' => $totalQuantity,
-                'view' => $product['view'],
-                'promotion_price' => $product['promotion_price'],
-                'categories' => $categories,
-                'status' => $product['status'],
-                'thumbnail_variant' => $getImageCategory['thumbnail_variant'],
-            ];
-        }
-
 
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
                 $categories = $this->modelProduct->getCategoryById($product['id']);
                 $variants = $this->modelProduct->getVariantById($product['id']);
+                
+                // var_dump($variants);
+                $resultQuantityById = [];
                 foreach ($variants as $key => $variant) {
+                   
                     $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
                 }
+                $totalQuantity = 0;
+                if (!empty($resultQuantityById)) {
+                    $totalQuantity = array_reduce($resultQuantityById, function ($total, $num) {
+                        return $total + $num['total'];
+                    }, 0);
+                } else {
+                    $totalQuantity = 0;
+                }
+                
+                // debug($totalQuantity);
+                $getImageVariant = $this->modelProduct->getImageByProductId($product['id']);
 
-                $totalQuantity = array_reduce($resultQuantityById, function ($total, $num) {
-                    return $total + $num['total'];
-                }, 0);
-
-
-
-
-
-                $getImageCategory = $this->modelProduct->getImageByProductId($product['id']);
+                if ($getImageVariant) {
+                    $thumbnail = $getImageVariant['thumbnail_variant'];
+                } else {
+                    $thumbnail = null;
+                }
                 $listProducts[] = [
                     'id' => $product['id'],
                     'product_name' => $product['product_name'],
@@ -264,9 +247,10 @@
                     'promotion_price' => $product['promotion_price'],
                     'categories' => $categories,
                     'status' => $product['status'],
-                    'thumbnail_variant' => $getImageCategory['thumbnail_variant'],
+                    'thumbnail_variant' => $thumbnail,
                 ];
             }
+          
 
             require './views/product/listProduct.php';
             delteSessionError();
@@ -412,7 +396,7 @@
                 // validate dữ liệu hình ảnh nhập vào
                 $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpg", 'image/webp', 'image/jpeg'];
                 if ($thumbnail_variant['error'] !== 0) {
-                   true;
+                    true;
                 } elseif (!in_array($thumbnail_variant['type'], $arrCheckImage)) {
                     $error['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
                 } elseif ($thumbnail_variant['size'] > 2500000) {
@@ -420,7 +404,7 @@
                 }
                 // validate mảng dữ liệu hình ảnh nhập vào
                 foreach ($albums['name'] as $num => $value) {
-                    
+
                     if ($albums['error'][$num] !== 0) {
                         continue;
                     } else if (!in_array($albums['type'][$num], $arrCheckImage)) {
@@ -429,7 +413,7 @@
                         $error['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                     }
                 }
-                
+
 
                 if (!empty($arrDelete)) {
 
@@ -510,5 +494,108 @@
         public function deleteProduct()
         {
             $product_id = $_GET['id'];
+        }
+        public function deleteVariant()
+        {
+
+            $variant_id = $_GET['variant_id'];
+            $product_id = $_GET['product_id'];
+            $deleteAlbum = $this->modelProduct->deleteAlbumById($variant_id);
+            $deleteSize = $this->modelProduct->deleteAllSizeById($variant_id);
+            $deleteVariant = $this->modelProduct->deleteVariantById($variant_id);
+
+            if ($deleteAlbum && $deleteSize && $deleteVariant) {
+
+                $_SESSION['success'] = 'Xoá biến thể thành công';
+                header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            } else {
+                $_SESSION['success'] = 'Xoá biến thể không thành công';
+                header('location' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                exit();
+            }
+        }
+        public function formAddVariant()
+        {
+            $product_id = $_GET['product_id'];
+            $product = $this->modelProduct->getProductById($product_id);
+            $listSize = $this->modelProduct->getAllSize();
+            require_once './views/product/formAddVariant.php';
+        }
+        public function postAddVariant()
+        {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $product_id = $_GET['product_id'];
+                $color = $_POST['color'];
+                $fileUpload = $_FILES['thumbnail'];
+                $albums= $_FILES['albums'];
+                $arr_size_id = $_POST['size_id'];
+                $quantitys = $_POST['quantitys'];
+
+                $error = [];
+                $arr_size = []; // mảng chứa size và số lượng đã qua xử lý
+                
+                foreach ($arr_size_id as $key => $value) {
+                    $arr_size[] = [
+                        'size_id' => $arr_size_id[$key],
+                        'quantity' => $quantitys[$key],
+                    ];
+                }
+                
+
+                if(empty($color)){
+                    $error['color'] = 'Màu sắc không để trống';
+                }
+                $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpeg", 'image/webp'];
+                    if ($fileUpload['error'] !== 0) {
+                        $error['thumbnail'] = 'Không để trống hình ảnh !';
+                    } elseif (!in_array($fileUpload['type'], $arrCheckImage)) {
+                        $error['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                    } elseif ($fileUpload['size'] > 2500000) {
+                        $error['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                    }
+               
+                
+      
+                    foreach ($albums['name'] as $num => $item) {
+
+                        if ($albums['error'][$num] !== 0) {
+                            $error['albums'] = 'Cần có ít nhất 1 hình ảnh mô tả';
+                        } else if (!in_array($albums['type'][$num], $arrCheckImage)) {
+                            $error['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                        } elseif ($albums['size'][$num] > 2500000) {
+                            $error['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                        }
+                    };
+                  
+                   
+               
+                if(empty($error)){
+                    $thumbnail_variant = uploadFile($fileUpload, './uploads/');
+                    $newVaiantId = $this->modelProduct->insertVariant($product_id, $color, $thumbnail_variant);
+                    foreach ($arr_size as $key => $value) {
+                        $addSize = $this->modelProduct->insertSize($newVaiantId, $value['quantity'], $value['size_id']);
+                    }
+                    
+                    foreach ($albums['name'] as $num => $value) {
+                        $file = [
+                            'name' => $albums['name'][$num],
+                            'type' => $albums['type'][$num],
+                            'tmp_name' => $albums['tmp_name'][$num],
+                            'error' => $albums['error'][$num],
+                            'size' => $albums['size'][$num],
+                        ];
+                        $link_image = uploadFile($file, './uploads/');
+                        $this->modelProduct->insertItemAlbumVariant($newVaiantId, $link_image);
+                    }
+                    $_SESSION['success'] = 'Thêm biến thể thành công';
+                    header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                    exit();
+                }else{
+                    $_SESSION['success'] = 'Thêm biến thể thất bại';
+                    header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                    exit();
+                }
+            }
         }
     }
