@@ -31,15 +31,16 @@ class adminProductModel
     public function addProduct($product_name, $product_description, $price, $promotion_price)
     {
         try {
-            $sql = "INSERT INTO products (product_name, product_description, price, promotion_price) 
-            VALUES (:product_name, :product_description, :price, :promotion_price)";
+            $sql = "INSERT INTO products (product_name, product_description, price, promotion_price, created_at) 
+            VALUES (:product_name, :product_description, :price, :promotion_price, now())";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
 
                 ':product_name' => $product_name,
                 ':product_description' => $product_description,
                 ':price' => $price,
-                ':promotion_price' => $promotion_price
+                ':promotion_price' => $promotion_price,
+
             ]);
             return $this->conn->lastInsertId();
         } catch (Exception $e) {
@@ -307,7 +308,8 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
-    public function insertItemAlbumVariant($variant_id, $link_image){
+    public function insertItemAlbumVariant($variant_id, $link_image)
+    {
         try {
             $sql = "INSERT INTO variant_albums (variant_id, link_image) VALUES (:variant_id, :link_image)";
             $stmt = $this->conn->prepare($sql);
@@ -316,6 +318,45 @@ class adminProductModel
                 ':variant_id' => $variant_id,
                 ':link_image' => $link_image,
 
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function deleteAlbumById($variant_id)
+    {
+        try {
+            $sql = "DELETE FROM variant_albums WHERE variant_id = :variant_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':variant_id' => $variant_id
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function deleteAllSizeById($variant_id)
+    {
+        try {
+            $sql = "DELETE FROM size_details WHERE variant_id = :variant_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':variant_id' => $variant_id
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function deleteVariantById($variant_id)
+    {
+        try {
+            $sql = "DELETE FROM variants WHERE id = :variant_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':variant_id' => $variant_id
             ]);
             return true;
         } catch (Exception $e) {
