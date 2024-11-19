@@ -12,9 +12,8 @@
 
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
-                            <img src="<?='.' . $_SESSION['user']['avatar'] ?>" width="20" alt="";
-                            onerror="this.onerror=null; this.src= '../uploads/user.png'" ;
-                            />
+                            <img src="<?= '.' . $_SESSION['user']['avatar'] ?>" width="20" alt="" ;
+                                onerror="this.onerror=null; this.src= '../uploads/user.png'" ; />
                             <div class="header-info">
                                 <span class="text-black"><?= $_SESSION['user']['username'] ?></span>
                                 <p class="fs-12 mb-0">
@@ -69,7 +68,7 @@
                 <ul aria-expanded="false">
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-product' ?>">Danh sách sản phẩm</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=add-product' ?>">Thêm sản phẩm</a></li>
-                
+
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
@@ -82,13 +81,13 @@
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
-                    <i class="flaticon-381-internet"></i>
-                    <span class="nav-text">Bootstrap</span>
+                    <i class="bi bi-people"></i>
+                    <span class="nav-text">Quản lý người dùng</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="ui-accordion.html">Accordion</a></li>
-                    <li><a href="ui-alert.html">Alert</a></li>
-                                    </ul>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-admin' ?>">Tài khoản quản trị</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-client' ?>">Tài khoản người dùng</a></li>
+                </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="flaticon-381-heart"></i>

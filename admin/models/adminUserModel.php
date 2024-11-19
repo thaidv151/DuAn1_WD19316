@@ -36,4 +36,54 @@ class adminUserModel{
             echo $e->getMessage();
            }
     }
+    public function getAllUserAdmin(){
+        try {
+            $sql= "SELECT * FROM users WHERE role_id = 1 OR role_id = 0";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           }
+    }
+    public function getAllUserClient(){
+        try {
+            $sql= "SELECT * FROM users WHERE role_id = 2";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           }
+    }
+    public function changeRole($user_id, $role_id){
+        try {
+            $sql= "UPDATE users SET role_id = :role_id WHERE id = :user_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                [
+                    ':user_id' => $user_id,
+                    ':role_id' => $role_id
+                ]
+            );
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           }
+    }
+    public function changeStatusUser($user_id, $status){
+        try {
+            $sql= "UPDATE users SET status = :status WHERE id = :user_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                [
+                    ':user_id' => $user_id,
+                    ':status' => $status
+                ]
+            );
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           }
+    }
 }

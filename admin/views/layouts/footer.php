@@ -16,7 +16,7 @@
  <script src="./assets/js/dlabnav-init.js"></script>
  <script src="./assets/js/demo.js"></script>
  <script src="./assets/js/styleSwitcher.js"></script>
- 
+
  <script src="./assets/vendor/moment/moment.min.js"></script>
  <script src="./assets/vendor/lightgallery/js/lightgallery-all.min.js"></script>
  <!-- Material color picker -->
@@ -24,8 +24,10 @@
 
 
  <script src="./assets/js/plugins-init/material-date-picker-init.js"></script>
- <script src="./assets/js/dlabnav-init.js"></script>
 
+ <!-- Datatable -->
+ <script src="./assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+ <script src="./assets/js/plugins-init/datatables.init.js"></script>
  </body>
 
  <!-- Mirrored from vora.dexignlab.com/xhtml/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 18 Nov 2024 02:08:37 GMT -->

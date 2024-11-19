@@ -45,7 +45,11 @@
                                 <div class="sign-in-your py-4 px-2">
                                     <h4 class="fs-20">Đăng nhập tài khoản của bạn</h4>
                                     <span>Chào mừng bạn đã quay trở lại với Website của chúng tôi<br> Hãy đăng nhập tài khoản của bạn !</span>
-
+                                    <div>
+                                        <?php if (isset($_SESSION['success'])) { ?>
+                                            <p class="alert alert-info"> <?= $_SESSION['success'] ?></p>
+                                        <?php } ?>
+                                    </div>
                                     <form action="<?= BASE_URL . '?act=post-login' ?>" method="POST">
                                         <div class="mb-3">
                                             <label class="mb-1"><strong>Email</strong>
