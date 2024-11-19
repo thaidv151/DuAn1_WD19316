@@ -143,7 +143,7 @@ require_once './views/layouts/sidebar.php';
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary">UPDATE</button>
-                    <p onclick="insertFormResetPass()" id="buttonResetPass" class="text-primary btn">Thay đổi mật khẩu?</p>
+                    
                 </div>
             </form>
         </div>

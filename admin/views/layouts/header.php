@@ -38,6 +38,9 @@
     <link href="./assets/vendor/lightgallery/css/lightgallery.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 
+    <link href="./assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+
 </head>
 
 <body>

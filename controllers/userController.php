@@ -35,6 +35,12 @@ class userController
             } elseif (!preg_match($regexEmail, $email)) {
                 $errors['email'] = 'Email không đúng định dạng example@gmail.com';
             }
+            $listUser = $this->modelUser->getAllUser();
+            foreach ($listUser as $key => $user) {
+                if($email === $user['email']){
+                    $errors['email'] = 'Email đã có người đăng ký';
+                }
+            }
             if (empty($username)) {
                 $errors['username'] = 'Không để trống tên người dùng';
             }
@@ -80,6 +86,7 @@ class userController
                 $role_id_default = 2; //Khác hàng sẽ có quyền mặc định là 2
                 $success = $this->modelUser->insertUser($username, $email, $phone, $date_of_birth, $gender, $status_default, $link_image, $role_id_default, $newPass);
                 if ($success) {
+                    $_SESSION['success'] = 'Đắng ký thành công !!';
                     header('location:' . BASE_URL . '?act=login');
                     exit();
                 }

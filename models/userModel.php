@@ -52,7 +52,19 @@ class modelUser
 
             return $stmt->fetch();
         } catch (PDOException $e) {
-       echo $e->getMessage();
+            echo $e->getMessage();
+        }
+    }
+    public function getAllUser()
+    {
+        try {
+            $sql = "SELECT * FROM users";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

@@ -44,24 +44,36 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
         'list-product' => (new adminProductController())->listProduct(),
         // Sửa trạng thái của sản phẩm
         'edit-status' => (new adminProductController())->editStatusProduct(),
-        // Sửa sản phẩm
+        // form Sửa sản phẩm
         'edit-product' => (new adminProductController())->formEditProduct(),
-
+        // Sửa lý dữ liệu sửa sản phẩm
         'post-edit-product' => (new adminProductController())->postEditProduct(),
-
+        // Xử lý dữ liệu sửa biến thế
         'post-edit-variant' => (new adminProductController())->postEditVariant(),
-
+        // Xoá Sản phẩm
         'delete-product' => (new adminProductController())->deleteProduct(),
-
+        // /Xoá biến thể
         'delete-variant' => (new adminProductController())->deleteVariant(),
-
+        // form thêm biến thể
         'form-add-variant' => (new adminProductController())->formAddVariant(),
-
+        // Xử lý dữ liệu thêm biến thể
         'post-add-variant' => (new adminProductController())->postAddVariant(),
-
+        //  Sửa thông tin của quản trị viên
         'edit-profile' => (new adminUserController())->formEditProfile(),
-
+        // Xử lý dữ liệu sửa thông tin
         'post-edit-profile' => (new adminUserController())->postEditProfile(),
+
+        //Quản trị danh sách người dùng
+
+        // Danh sách quản trị viên 
+        'list-user-admin' => (new adminUserController())->listUserAdmin(),
+
+        'change-role' => (new adminUserController())->changeRole(),
+
+        'change-status-user' => (new adminUserController())->changeStatusUser(),
+
+        'list-user-client' => (new adminUserController())->listUserClient(),
+
     };
 }else{
     header('location:' . BASE_URL . '?act=login');
