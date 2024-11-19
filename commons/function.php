@@ -52,3 +52,6 @@ function deleteFile($file){
         unlink($path);
     }
 }
+function formatDate ($date){
+    echo date_format($date,"d/m/Y");
+}

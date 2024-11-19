@@ -16,6 +16,15 @@
  <script src="./assets/js/dlabnav-init.js"></script>
  <script src="./assets/js/demo.js"></script>
  <script src="./assets/js/styleSwitcher.js"></script>
+ 
+ <script src="./assets/vendor/moment/moment.min.js"></script>
+ <script src="./assets/vendor/lightgallery/js/lightgallery-all.min.js"></script>
+ <!-- Material color picker -->
+ <script src="./assets/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+
+
+ <script src="./assets/js/plugins-init/material-date-picker-init.js"></script>
+ <script src="./assets/js/dlabnav-init.js"></script>
 
  </body>
 
