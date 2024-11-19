@@ -28,8 +28,15 @@
     <link href="./assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./assets/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link href="./assets/vendor/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+  
+    <link href="./assets/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link href="./assets/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="./assets/vendor/lightgallery/css/lightgallery.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 
 </head>
 
@@ -80,9 +87,7 @@
         <!--**********************************
             Chat box start
         ***********************************-->
-    
+
         <!--**********************************
             Chat box End
         ***********************************-->
-
-      

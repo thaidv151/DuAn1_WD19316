@@ -1,58 +1,69 @@
-<?php 
+<?php
 session_start();
-
-// Require file Common
 require_once '../commons/env.php'; // Khai báo biến môi trường
 require_once '../commons/function.php'; // Hàm hỗ trợ
 
-// Require toàn bộ file Controllers
-require_once './controllers/adminController.php';
-require_once './controllers/adminProductController.php';
-require_once './controllers/AdminDanhMucController.php';
+// Require file Common
+if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
+    
 
-// Require toàn bộ file Models
-require_once './models/adminModel.php';
-require_once './models/adminProductModel.php';
-require_once './models/AdminDanhMuc.php';
+    // Require toàn bộ file Controllers
+    require_once './controllers/adminController.php';
+    require_once './controllers/adminProductController.php';
+    require_once './controllers/AdminDanhMucController.php';
+    require_once './controllers/AdminUserController.php';
 
-// Route
-$act = $_GET['act'] ?? '/';
+    // Require toàn bộ file Models
+    require_once './models/adminModel.php';
+    require_once './models/adminProductModel.php';
+    require_once './models/AdminDanhMuc.php';
+    require_once './models/AdminUserModel.php';
 
-// Để bảo bảo tính chất chỉ gọi 1 hàm Controller để xử lý request thì mình sử dụng match
+    // Route
+    $act = $_GET['act'] ?? '/';
 
-match ($act) {
-    // Trang chủ
-    '/' => (new adminController())->homeAdmin(),
+    // Để bảo bảo tính chất chỉ gọi 1 hàm Controller để xử lý request thì mình sử dụng match
 
-    //danh mục
-    'danh-muc' => (new adminDanhMucController())->DanhSachDanhMuc(),
-    'form-them-danh-muc' => (new adminDanhMucController())->formThemDanhMuc(),
-    'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
-    'xoa-danh-muc'=>(new adminDanhMucController())->deleteDanhMuc(),
-   
+    match ($act) {
+        // Trang chủ
+        '/' => (new adminController())->homeAdmin(),
 
-    // Quản lý sản phẩm
-    // route thêm sản phẩm
-    'add-product' => (new adminProductController())->addProduct(),
-    // Xử lý post thêm sản phẩm
-    'post-add-product' => (new adminProductController())->postAddProduct(),
-    // Danh sách sản phẩm
-    'list-product' => (new adminProductController())->listProduct(),
-    // Sửa trạng thái của sản phẩm
-    'edit-status' => (new adminProductController())->editStatusProduct(),
-    // Sửa sản phẩm
-    'edit-product' => (new adminProductController())->formEditProduct(),
+        //danh mục
+        'danh-muc' => (new adminDanhMucController())->DanhSachDanhMuc(),
+        'form-them-danh-muc' => (new adminDanhMucController())->formThemDanhMuc(),
+        'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
+        'xoa-danh-muc' => (new adminDanhMucController())->deleteDanhMuc(),
 
-    'post-edit-product' => (new adminProductController())->postEditProduct(),
 
-    'post-edit-variant' => (new adminProductController())->postEditVariant(),
+        // Quản lý sản phẩm
+        // route thêm sản phẩm
+        'add-product' => (new adminProductController())->addProduct(),
+        // Xử lý post thêm sản phẩm
+        'post-add-product' => (new adminProductController())->postAddProduct(),
+        // Danh sách sản phẩm
+        'list-product' => (new adminProductController())->listProduct(),
+        // Sửa trạng thái của sản phẩm
+        'edit-status' => (new adminProductController())->editStatusProduct(),
+        // Sửa sản phẩm
+        'edit-product' => (new adminProductController())->formEditProduct(),
 
-    'delete-product' => (new adminProductController())->deleteProduct(),
+        'post-edit-product' => (new adminProductController())->postEditProduct(),
 
-    'delete-variant' => (new adminProductController())->deleteVariant(),
+        'post-edit-variant' => (new adminProductController())->postEditVariant(),
 
-    'form-add-variant' => (new adminProductController())->formAddVariant(),
+        'delete-product' => (new adminProductController())->deleteProduct(),
 
-    'post-add-variant' => (new adminProductController())->postAddVariant(),
+        'delete-variant' => (new adminProductController())->deleteVariant(),
 
-};
+        'form-add-variant' => (new adminProductController())->formAddVariant(),
+
+        'post-add-variant' => (new adminProductController())->postAddVariant(),
+
+        'edit-profile' => (new adminUserController())->formEditProfile(),
+
+        'post-edit-profile' => (new adminUserController())->postEditProfile(),
+    };
+}else{
+    header('location:' . BASE_URL . '?act=login');
+    exit();
+}
