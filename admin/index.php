@@ -1,24 +1,26 @@
 <?php
+
 session_start();
 require_once '../commons/env.php'; // Khai báo biến môi trường
 require_once '../commons/function.php'; // Hàm hỗ trợ
 
 // Require file Common
 if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
-    
+
 
     // Require toàn bộ file Controllers
     require_once './controllers/adminController.php';
     require_once './controllers/adminProductController.php';
     require_once './controllers/AdminDanhMucController.php';
     require_once './controllers/AdminUserController.php';
+    require_once './controllers/AdminOrderController.php';
 
     // Require toàn bộ file Models
     require_once './models/adminModel.php';
     require_once './models/adminProductModel.php';
     require_once './models/AdminDanhMuc.php';
     require_once './models/AdminUserModel.php';
-
+    require_once './models/AdminOrderModel.php';
     // Route
     $act = $_GET['act'] ?? '/';
 
@@ -74,8 +76,20 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
 
         'list-user-client' => (new adminUserController())->listUserClient(),
 
+
+        // Xử lý đơn hàng
+        'detail-order' => (new adminOrderController())->detailOrder(),
+
+        'change-status-order' => (new adminOrderController())->changeStatusOrder(),
+
+        'list-new-order' => (new adminOrderController())->listNewOrder(),
+
+        'list-process-order' => (new adminOrderController())->listProcessOrder(), // Danh sách đơn hàng đã xác nhận
+        'list-complete-order' => (new adminOrderController())->listCompleteOrder(), // Danh sách đơn hàng đã Hoàn thành
+        'list-cancel-order' => (new adminOrderController())->listCancelOrder(), // Danh sách đơn hàng hoàn đã huỷ
+        'list-return-order' => (new adminOrderController())->listReturnOrder(), // Danh sách đơn hàng đã Hoàn lại
     };
-}else{
+} else {
     header('location:' . BASE_URL . '?act=login');
     exit();
 }

@@ -7,7 +7,7 @@ class adminUserModel{
     }
     public function updateUser($user_id, $username, $phone, $date_of_birth, $gender, $newAvatar, $newPass){
        try {
-        $sql = "UPDATE users SET username = :username,  phone = :phone, date_of_birth = :date_of_birth, gender = :gender, avatar = :newAvatar, password = :newPass  
+        $sql = "UPDATE users SET username = :username,  phone = :phone, date_of_birth = :date_of_birth, gender = :gender, avatar = :newAvatar, password = :newPass , update_at = now() 
         WHERE id = :user_id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([

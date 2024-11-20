@@ -124,7 +124,7 @@ class userController
             if ($success && empty($errors)) {
                 if ($user['role_id'] === 0 || $user['role_id'] === 1) {
                     $_SESSION['user'] = $user;
-                    header('location:' . BASE_URL_ADMIN);
+                    header('location:' . BASE_URL_ADMIN); 
                     exit();
                 } else {
                     $_SESSION['user'] = $user;
