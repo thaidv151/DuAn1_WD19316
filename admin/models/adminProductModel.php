@@ -184,7 +184,7 @@ class adminProductModel
     public function editProduct($product_id, $product_name, $product_description, $price, $promotion_price)
     {
         try {
-            $sql = "UPDATE products SET product_name = :product_name, product_description =:product_description, price = :price, promotion_price = :promotion_price WHERE id = :product_id";
+            $sql = "UPDATE products SET product_name = :product_name, product_description =:product_description, price = :price, promotion_price = :promotion_price , update_at = now() WHERE id = :product_id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
 
@@ -283,7 +283,6 @@ class adminProductModel
             $sql = "UPDATE size_details SET quantity_size =:quantity_size WHERE variant_id = :variant_id AND size_id = :size_id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
-
                 ':variant_id' => $variant_id,
                 ':size_id' => $size_id,
                 ':quantity_size' => $quantity_size

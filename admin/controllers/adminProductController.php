@@ -197,19 +197,9 @@
             $listProducts = [];
             $products = $this->modelProduct->getAllProduct();
 
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-                $resultProducts = [];
-                foreach ($products as $key => $item) {
-
-                    if (strpos(strtolower($item['product_name']), strtolower($_POST['inpSearch'])) !== false) {
-
-                        $resultProducts[] = $item;
-                    }
-                }
-            } else {
-                $products = $this->modelProduct->getAllProduct();
-            }
+           
+            $products = $this->modelProduct->getAllProduct();
+            
 
 
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
@@ -222,7 +212,9 @@
                    
                     $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
                 }
+
                 $totalQuantity = 0;
+
                 if (!empty($resultQuantityById)) {
                     $totalQuantity = array_reduce($resultQuantityById, function ($total, $num) {
                         return $total + $num['total'];

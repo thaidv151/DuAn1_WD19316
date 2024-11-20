@@ -43,7 +43,7 @@ require_once './views/layouts/sidebar.php';
             <tbody>
 
               <?php foreach ($listProducts  as $key => $product): ?>
-                <tr>
+                <tr class="text-center">
                   <td>
                     <?= $key + 1 ?>
                   </td>
