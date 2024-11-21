@@ -14,6 +14,7 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
     require_once './controllers/AdminDanhMucController.php';
     require_once './controllers/AdminUserController.php';
     require_once './controllers/AdminOrderController.php';
+    require_once './controllers/AdminVoucherController.php';
 
     // Require toàn bộ file Models
     require_once './models/adminModel.php';
@@ -21,6 +22,7 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
     require_once './models/AdminDanhMuc.php';
     require_once './models/AdminUserModel.php';
     require_once './models/AdminOrderModel.php';
+    require_once './models/AdminVoucherModel.php';
     // Route
     $act = $_GET['act'] ?? '/';
 
@@ -87,7 +89,19 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
         'list-process-order' => (new adminOrderController())->listProcessOrder(), // Danh sách đơn hàng đã xác nhận
         'list-complete-order' => (new adminOrderController())->listCompleteOrder(), // Danh sách đơn hàng đã Hoàn thành
         'list-cancel-order' => (new adminOrderController())->listCancelOrder(), // Danh sách đơn hàng hoàn đã huỷ
+        
         'list-return-order' => (new adminOrderController())->listReturnOrder(), // Danh sách đơn hàng đã Hoàn lại
+
+        'form-add-voucher' => (new adminVoucherController())->formAddVoucher(),
+
+        'post-add-voucher' => (new adminVoucherController())->postAddVoucher(),
+
+        'list-voucher' => (new adminVoucherController())->listVoucher(),
+
+        'change-status-voucher' => (new adminVoucherController())->changeStatusVoucher(),
+
+        'form-edit-voucher' => (new adminVoucherController())->formEditVoucher(),
+        'post-edit-voucher' => (new adminVoucherController())->postEditVoucher(),
     };
 } else {
     header('location:' . BASE_URL . '?act=login');

@@ -513,6 +513,7 @@
             $product = $this->modelProduct->getProductById($product_id);
             $listSize = $this->modelProduct->getAllSize();
             require_once './views/product/formAddVariant.php';
+            delteSessionError();
         }
         public function postAddVariant()
         {
@@ -526,8 +527,9 @@
 
                $errors = [];
                 $arr_size = []; // mảng chứa size và số lượng đã qua xử lý
-                
+                $total = 0;
                 foreach ($arr_size_id as $key => $value) {
+                    $total += $quantitys[$key];
                     $arr_size[] = [
                         'size_id' => $arr_size_id[$key],
                         'quantity' => $quantitys[$key],
@@ -537,6 +539,9 @@
 
                 if(empty($color)){
                    $errors['color'] = 'Màu sắc không để trống';
+                }
+                if($total <= 0){
+                   $errors['size'] = 'Phải ít nhất có 1 size có số lượng';
                 }
                 $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpeg", 'image/webp'];
                     if ($fileUpload['error'] !== 0) {
@@ -562,7 +567,7 @@
                   
                    
                
-                if(empty($error)){
+                if(empty($errors)){
                     $thumbnail_variant = uploadFile($fileUpload, './uploads/');
                     $newVaiantId = $this->modelProduct->insertVariant($product_id, $color, $thumbnail_variant);
                     foreach ($arr_size as $key => $value) {
@@ -586,8 +591,10 @@
                     header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
                     exit();
                 }else{
+                    $_SESSION['flash'] = true;
+                    $_SESSION['error'] = $errors;
                     $_SESSION['success'] = 'Thêm biến thể thất bại';
-                    header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
+                    header('location:' . BASE_URL_ADMIN . '?act=form-add-variant&product_id=' . $product_id);
                     exit();
                 }
             }

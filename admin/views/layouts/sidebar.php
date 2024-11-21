@@ -94,18 +94,24 @@
                     <span class="nav-text">Đơn hàng</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-new-order' ?>">Đơn hàng  mới</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-new-order' ?>">Đơn hàng mới</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-process-order' ?>">Đơn hàng đang xử lý</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-complete-order' ?>">Đơn hàn hoàn thành</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-cancel-order' ?>">Đơn hàng huỷ</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-return-order' ?>">Đơn hàng hoàn</a></li>
-                    
+
                 </ul>
             </li>
-            <li><a href="widget-basic.html" class="ai-icon" aria-expanded="false">
-                    <i class="flaticon-381-settings-2"></i>
-                    <span class="nav-text">Widget</span>
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="bi bi-ticket-perforated"></i>
+                    <span class="nav-text">Phiếu giảm giá</span>
                 </a>
+                <ul aria-expanded="false">
+                   
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-voucher' ?>">Danh sách voucher</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=form-add-voucher' ?>">Thêm voucher</a></li>
+                </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="flaticon-381-notepad"></i>
