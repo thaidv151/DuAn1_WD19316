@@ -116,7 +116,6 @@ require_once './views/layouts/sidebar.php';
                             </div>
                             <div class="col-12">
                                 <input type="file" name="thumbnail_variant" class="form-control">
-
                                 <input type="hidden" name="oldImg" id="" value="<?= $variant['thumbnail_variant'] ?>">
                             </div>
                         </div>
@@ -124,6 +123,7 @@ require_once './views/layouts/sidebar.php';
 
                             <div class="col-12 row">
                                 <label for="" class="me-4 ">Albums của biến thể: </label>
+                                
                                 <?php if (isset($_SESSION['error']['albums'])) { ?>
                                     <p class="text-danger"> <?= $_SESSION['error']['albums'] ?> </p>
                                 <?php } ?>
