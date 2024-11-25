@@ -10,7 +10,6 @@
         public function addProduct()
         {
             $listCategories = $this->modelProduct->getAllCategories();
-
             $listSize = $this->modelProduct->getAllSize();
             require './views/product/addProduct.php';
             delteSessionError();
@@ -43,26 +42,28 @@
 
 
                 $thumbnails = $_FILES['thumbnail'];
-               $errors = [];
+                $errors = [];
 
                 if (empty($product_name)) {
-                   $errors['product_name'] = 'Tên sản phẩm không để trống !';
+                    $errors['product_name'] = 'Tên sản phẩm không để trống !';
                 }
                 foreach ($color as $key => $value) {
 
                     if ($color[$key] === '') {
-                       $errors['color'] = 'Màu sản phẩm không để trống !';
+                        $errors['color'] = 'Màu sản phẩm không để trống !';
                     }
                 }
-
+                if ($promotion_price > $price) {
+                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+                }
                 if (empty($price)) {
-                   $errors['price'] = 'Giá sản phẩm không để trống !';
+                    $errors['price'] = 'Giá sản phẩm không để trống !';
                 }
                 if (empty($promotion_price)) {
-                   $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
+                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
                 }
                 if (empty($product_description)) {
-                   $errors['product_description'] = 'Mô tả không để trống !';
+                    $errors['product_description'] = 'Mô tả không để trống !';
                 }
 
                 $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpeg", 'image/webp'];
@@ -71,11 +72,11 @@
 
 
                     if ($thumbnails['error'][$key] !== 0) {
-                       $errors['thumbnail'] = 'Không để trống hình ảnh !';
+                        $errors['thumbnail'] = 'Không để trống hình ảnh !';
                     } elseif (!in_array($thumbnails['type'][$key], $arrCheckImage)) {
-                       $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                        $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
                     } elseif ($thumbnails['size'][$key] > 2500000) {
-                       $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                        $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                     }
                 }
 
@@ -93,37 +94,38 @@
                         if ($file_albums['error'][$num] !== 0) {
                             continue;
                         } else if (!in_array($file_albums['type'][$num], $arrCheckImage)) {
-                           $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                            $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
                         } elseif ($file_albums['size'][$num] > 2500000) {
-                           $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                            $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                         }
                     };
                 }
 
 
                 if (!is_numeric($price)) {
-                   $errors['price'] = 'Giá sản phẩm phải là số !';
+                    $errors['price'] = 'Giá sản phẩm phải là số !';
                 }
                 if (!is_numeric($promotion_price)) {
-                   $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
+                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
                 }
                 foreach ($quantitys as $key => $size) {
                     $results = array_filter($size, function ($value) {
                         return $value > 0;
                     });
                     if (empty($results)) {
-                       $errors['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
+                        $errors['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
                         break;
                     }
                 }
                 if (empty($categories)) {
-                   $errors['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
+                    $errors['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
                 }
 
 
 
-                $_SESSION['error'] =$errors;
-                if (empty($error)) {
+                $_SESSION['error'] = $errors;
+
+                if (empty($errors)) {
 
                     $success = $this->modelProduct->addProduct($product_name, $product_description, $price, $promotion_price);
 
@@ -197,19 +199,14 @@
             $listProducts = [];
             $products = $this->modelProduct->getAllProduct();
 
-           
-            $products = $this->modelProduct->getAllProduct();
-            
-
-
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
                 $categories = $this->modelProduct->getCategoryById($product['id']);
                 $variants = $this->modelProduct->getVariantById($product['id']);
-                
+
                 // var_dump($variants);
                 $resultQuantityById = [];
                 foreach ($variants as $key => $variant) {
-                   
+
                     $resultQuantityById[] = $this->modelProduct->getAllQuantityById($variant['id']);
                 }
 
@@ -222,7 +219,7 @@
                 } else {
                     $totalQuantity = 0;
                 }
-                
+
                 // debug($totalQuantity);
                 $getImageVariant = $this->modelProduct->getImageByProductId($product['id']);
 
@@ -242,7 +239,7 @@
                     'thumbnail_variant' => $thumbnail,
                 ];
             }
-          
+
 
             require './views/product/listProduct.php';
             delteSessionError();
@@ -317,33 +314,35 @@
                 $categories = $_POST['categories'] ?? ''; // mảng danh mục của sản phẩm
 
 
-               $errors = [];
+                $errors = [];
 
                 if (empty($product_name)) {
-                   $errors['product_name'] = 'Tên sản phẩm không để trống !';
+                    $errors['product_name'] = 'Tên sản phẩm không để trống !';
                 }
-
+                if ($promotion_price > $price) {
+                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+                }
 
                 if (empty($price)) {
-                   $errors['price'] = 'Giá sản phẩm không để trống !';
+                    $errors['price'] = 'Giá sản phẩm không để trống !';
                 }
                 if (empty($promotion_price)) {
-                   $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
+                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
                 } else if (!is_numeric($price)) {
-                   $errors['price'] = 'Giá sản phẩm phải là số !';
+                    $errors['price'] = 'Giá sản phẩm phải là số !';
                 }
                 if (empty($product_description)) {
-                   $errors['product_description'] = 'Mô tả không để trống !';
+                    $errors['product_description'] = 'Mô tả không để trống !';
                 } else if (!is_numeric($promotion_price)) {
-                   $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
+                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
                 }
 
 
 
                 if (empty($categories)) {
-                   $errors['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
+                    $errors['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
                 }
-                $_SESSION['error'] =$errors;
+                $_SESSION['error'] = $errors;
                 if (empty($error)) {
 
                     $this->modelProduct->editProduct($product_id, $product_name, $product_description, $price, $promotion_price);
@@ -384,15 +383,15 @@
                 $linkArrDelete = $_POST['linkArrDelete'] ?? '';
 
                 $albums  = $_FILES['albums'] ?? '';
-               $errors = [];
+                $errors = [];
                 // validate dữ liệu hình ảnh nhập vào
                 $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpg", 'image/webp', 'image/jpeg'];
                 if ($thumbnail_variant['error'] !== 0) {
                     true;
                 } elseif (!in_array($thumbnail_variant['type'], $arrCheckImage)) {
-                   $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                    $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
                 } elseif ($thumbnail_variant['size'] > 2500000) {
-                   $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                    $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                 }
                 // validate mảng dữ liệu hình ảnh nhập vào
                 foreach ($albums['name'] as $num => $value) {
@@ -400,9 +399,9 @@
                     if ($albums['error'][$num] !== 0) {
                         continue;
                     } else if (!in_array($albums['type'][$num], $arrCheckImage)) {
-                       $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                        $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
                     } elseif ($albums['size'][$num] > 2500000) {
-                       $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                        $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                     }
                 }
 
@@ -442,14 +441,14 @@
 
 
                 if ($sum <= 0) {
-                   $errors['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
+                    $errors['quantitys'] = 'Không để trống size (phải có 1 nhất 1 size có số lượng)  !';
                 }
 
                 if ($color === '') {
-                   $errors['color'] = 'Màu sản phẩm không để trống !';
+                    $errors['color'] = 'Màu sản phẩm không để trống !';
                 }
 
-                $_SESSION['error'] =$errors;
+                $_SESSION['error'] = $errors;
                 if (empty($error)) {
 
                     $results =  $this->modelProduct->updateVariant($variant_id, $newImg, $color);
@@ -521,11 +520,11 @@
                 $product_id = $_GET['product_id'];
                 $color = $_POST['color'];
                 $fileUpload = $_FILES['thumbnail'];
-                $albums= $_FILES['albums'];
+                $albums = $_FILES['albums'];
                 $arr_size_id = $_POST['size_id'];
                 $quantitys = $_POST['quantitys'];
 
-               $errors = [];
+                $errors = [];
                 $arr_size = []; // mảng chứa size và số lượng đã qua xử lý
                 $total = 0;
                 foreach ($arr_size_id as $key => $value) {
@@ -535,45 +534,45 @@
                         'quantity' => $quantitys[$key],
                     ];
                 }
-                
 
-                if(empty($color)){
-                   $errors['color'] = 'Màu sắc không để trống';
+
+                if (empty($color)) {
+                    $errors['color'] = 'Màu sắc không để trống';
                 }
-                if($total <= 0){
-                   $errors['size'] = 'Phải ít nhất có 1 size có số lượng';
+                if ($total <= 0) {
+                    $errors['size'] = 'Phải ít nhất có 1 size có số lượng';
                 }
                 $arrCheckImage = ['image/png', 'image/jpg', "image/gif", "image/jpeg", 'image/webp'];
-                    if ($fileUpload['error'] !== 0) {
-                       $errors['thumbnail'] = 'Không để trống hình ảnh !';
-                    } elseif (!in_array($fileUpload['type'], $arrCheckImage)) {
-                       $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
-                    } elseif ($fileUpload['size'] > 2500000) {
-                       $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
-                    }
-               
-                
-      
-                    foreach ($albums['name'] as $num => $item) {
+                if ($fileUpload['error'] !== 0) {
+                    $errors['thumbnail'] = 'Không để trống hình ảnh !';
+                } elseif (!in_array($fileUpload['type'], $arrCheckImage)) {
+                    $errors['thumbnail'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                } elseif ($fileUpload['size'] > 2500000) {
+                    $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                }
 
-                        if ($albums['error'][$num] !== 0) {
-                           $errors['albums'] = 'Cần có ít nhất 1 hình ảnh mô tả';
-                        } else if (!in_array($albums['type'][$num], $arrCheckImage)) {
-                           $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
-                        } elseif ($albums['size'][$num] > 2500000) {
-                           $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
-                        }
-                    };
-                  
-                   
-               
-                if(empty($errors)){
+
+
+                foreach ($albums['name'] as $num => $item) {
+
+                    if ($albums['error'][$num] !== 0) {
+                        $errors['albums'] = 'Cần có ít nhất 1 hình ảnh mô tả';
+                    } else if (!in_array($albums['type'][$num], $arrCheckImage)) {
+                        $errors['albums'] = 'File không hợp lệ ( chỉ nhận .png, .jpg, .gif, .webp )';
+                    } elseif ($albums['size'][$num] > 2500000) {
+                        $errors['albums'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
+                    }
+                };
+
+
+
+                if (empty($errors)) {
                     $thumbnail_variant = uploadFile($fileUpload, './uploads/');
                     $newVaiantId = $this->modelProduct->insertVariant($product_id, $color, $thumbnail_variant);
                     foreach ($arr_size as $key => $value) {
                         $addSize = $this->modelProduct->insertSize($newVaiantId, $value['quantity'], $value['size_id']);
                     }
-                    
+
                     foreach ($albums['name'] as $num => $value) {
                         $file = [
                             'name' => $albums['name'][$num],
@@ -590,7 +589,7 @@
                     $_SESSION['success'] = 'Thêm biến thể thành công';
                     header('location:' . BASE_URL_ADMIN . '?act=edit-product&id=' . $product_id);
                     exit();
-                }else{
+                } else {
                     $_SESSION['flash'] = true;
                     $_SESSION['error'] = $errors;
                     $_SESSION['success'] = 'Thêm biến thể thất bại';

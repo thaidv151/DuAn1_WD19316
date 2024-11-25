@@ -53,6 +53,7 @@
                         <div> <strong><?= $orderUser['username'] ?></strong> </div>
                         <div>Email: <?= $orderUser['email'] ?></div>
                         <div>Số điện thoại: <?= $orderUser['phone'] ?></div>
+                        <div>Phương thức thanh toán: <?= $orderById['payment_method_name'] ?></div>
 
                     </div>
                     <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
@@ -86,9 +87,9 @@
                                 <td class="left"><?= $product['product_description'] ?></td>
                                 <td class="left"><?= $product['color'] ?></td>
                                 <td class="left"><?= $product['size'] ?></td>
-                                <td class="right"><?= $product['unit_cost'] ?></td>
-                                <td class="center"><?= $product['product_quantity'] ?></td>
-                                <td class="right"><?= $product['total_cost'] ?></td>
+                                <td class="right"><?= number_format($product['unit_cost']) ?></td>
+                                <td class="center"><?= number_format($product['product_quantity']) ?></td>
+                                <td class="right"><?= number_format($product['total_cost']) ?></td>
                             </tr>
                             <?php endforeach; ?>
                             

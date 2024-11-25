@@ -11,16 +11,16 @@
             <div class="form-group col-12">
                 <label>Tên danh mục</label>
                 <input class="form-control" type="text" placeholder="Tên danh mục" name="category_name">
-                <?php if (isset($errors['category_name'])) { ?>
-                    <p class="text-danger"> <?= $errors['category_name'] ?> </p>
+                <?php if (isset($_SESSION['error']['category_name'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['category_name'] ?> </p>
                 <?php } ?>
             </div>
 
             <div class="form-group col-12">
                 <label>Mô tả</label>
                 <textarea class="form-control" placeholder="Mô tả danh mục" name="description"></textarea>
-                <?php if (isset($errors['description'])) { ?>
-                    <p class="text-danger"> <?= $errors['description'] ?> </p>
+                <?php if (isset($_SESSION['error']['description'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['description'] ?> </p>
                 <?php } ?>
             </div>
 
