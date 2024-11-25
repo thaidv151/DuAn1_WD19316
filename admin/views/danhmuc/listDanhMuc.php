@@ -6,8 +6,11 @@
 <div class="col-12">
     <div class="card">
         <div class="card-header  alert-primary">
-            <h4 class="card-title">Danh sách sản phẩm</h4>
+            <h4 class="card-title">Danh sách danh mục</h4>
         </div>
+        <?php if(isset($_SESSION['success'])):?>
+            <div class="alert alert-info"><?= $_SESSION['success'] ?></div>
+        <?php endif ?>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="example" class="display min-w850">
@@ -51,4 +54,5 @@
         </div>
     </div>
 </div>
+
 <?php require_once './views/layouts/footer.php'; ?>

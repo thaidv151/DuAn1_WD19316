@@ -3,7 +3,7 @@ require_once './views/layouts/header.php';
 require_once './views/layouts/sidebar.php';
 ?>
 
-<h3 class="alert alert-secondary">Quản lý: Sản phẩm</h3>
+<h3 class="alert alert-secondary">Quản lý: mã giảm giá</h3>
 <div class="col-12 card">
 
 
@@ -20,7 +20,7 @@ require_once './views/layouts/sidebar.php';
     <div class="col-12">
         <div class="card">
             <div class="card-header  alert-primary">
-                <h4 class="card-title">Danh sách sản phẩm</h4>
+                <h4 class="card-title">Danh sách mã giảm giá</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

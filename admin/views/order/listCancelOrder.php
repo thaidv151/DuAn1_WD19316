@@ -1,12 +1,12 @@
 <?php require_once './views/layouts/header.php'; ?>
 <?php require_once './views/layouts/sidebar.php'; ?>
-<h3 class="alert alert-secondary">Quản lý: Danh sách danh mục</h3>
+<h3 class="alert alert-secondary">Quản lý: Đơn hàng</h3>
 
 
 <div class="col-12">
     <div class="card">
         <div class="card-header  alert-primary">
-            <h4 class="card-title">Danh sách sản phẩm</h4>
+            <h4 class="card-title">Danh sách đơn hàng huỷ</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,7 +17,7 @@
                             <th class="col-1">Số điện thoại</th>
                             <th class="col-1">Ngày đặt</th>
                             <th class="col-2">Trạng thái</th>
-                            <th class="col-4">Thanh toán</th>
+                            <th class="col-2">Thanh toán</th>
                             <th class="col-1">Thời gian cập nhật</th>
                             <th class="col-2">Hành động</th>
                         </tr>

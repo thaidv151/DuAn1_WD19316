@@ -55,7 +55,7 @@
 <div class="dlabnav">
     <div class="dlabnav-scroll">
         <ul class="metismenu" id="menu">
-            <li><a href="<?= BASE_URL_ADMIN ?>" class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+            <li><a href="<?= BASE_URL_ADMIN ?>" href="javascript:void(0);" aria-expanded="false">
                     <i class="flaticon-381-networking"></i>
                     <span class="nav-text">Trang chủ</span>
                 </a>
@@ -82,7 +82,7 @@
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="bi bi-people"></i>
-                    <span class="nav-text">Quản lý người dùng</span>
+                    <span class="nav-text">Người dùng</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-admin' ?>">Tài khoản quản trị</a></li>

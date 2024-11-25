@@ -19,7 +19,7 @@ class adminOrderController
         $orderById = $this->modelOrder->getOrderById($order_id); // lấy ra chi tiết đơn hàng
         $orderUser = $this->modelUser->getUserById($orderById['user_id']); // lấy ra user mua đơn hàng
         $allStatus = $this->modelOrder->getAllStatusOrder(); // lấy ra các trạng thái của đơn hàng
-
+      
         $listProductByOrderId = $this->modelOrder->getAllProductByOrderId($order_id); // Lấy hết cấc sản phẩm trong đơn hàng
         $subTotal = 0;
         foreach ($listProductByOrderId as $key => $product) { // lấy ra tổng giá tất cả các đơn hàng cộng lại
@@ -28,15 +28,15 @@ class adminOrderController
         $voucher = $this->modelOrder->getVoucherByOrderId($order_id);
        
         if (!empty($voucher)) {
-            if (($subTotal / 100 * 15) < $voucher['max_disscount_amount']) {
-                $disscount = ($subTotal / 100 * 15);
+            if (($subTotal / 100 * $voucher['disscount_value']) < $voucher['max_disscount_amount']) {
+                $disscount = ($subTotal / 100 * $voucher['disscount_value']);
             } else {
                 $disscount = $voucher['max_disscount_amount'];
             }
         }else{
             $disscount = 0;
         }
-      
+        
         $total = $subTotal - $disscount;
        // tính ra giá ssau khi áp dụng voucher
         require_once './views/order/detailOrder.php';
