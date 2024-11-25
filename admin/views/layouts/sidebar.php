@@ -81,6 +81,15 @@
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-controls-3"></i>
+                    <span class="nav-text">Banner</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-banner'  ?>">Danh sách banner</a></li>
+                    <li><a href="<?= BASE_URL_ADMIN . '?act=add-banner' ?>">Thêm Banner</a></li>
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="bi bi-people"></i>
                     <span class="nav-text">Quản lý người dùng</span>
                 </a>
@@ -154,7 +163,6 @@
                 </ul>
             </li>
         </ul>
-
     </div>
 </div>
 <!--**********************************

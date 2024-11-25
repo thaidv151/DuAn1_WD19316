@@ -15,6 +15,7 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
     require_once './controllers/AdminUserController.php';
     require_once './controllers/AdminOrderController.php';
     require_once './controllers/AdminVoucherController.php';
+    require_once './controllers/AdminBannerController.php';
 
     // Require toàn bộ file Models
     require_once './models/adminModel.php';
@@ -23,6 +24,8 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
     require_once './models/AdminUserModel.php';
     require_once './models/AdminOrderModel.php';
     require_once './models/AdminVoucherModel.php';
+    require_once './models/AdminBanner.php';
+
     // Route
     $act = $_GET['act'] ?? '/';
 
@@ -37,7 +40,13 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
         'form-them-danh-muc' => (new adminDanhMucController())->formThemDanhMuc(),
         'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
         'xoa-danh-muc' => (new adminDanhMucController())->deleteDanhMuc(),
-
+        // Quản lý banner
+        'list-banner' => (new AdminBannerController())->listBanner(),
+        'add-banner' => (new AdminBannerController())->fromAddBanner(),
+        'post-add-banner' => (new AdminBannerController())->postAddBanner(),
+        'edit-banner' => (new AdminBannerController())->fromEditBanner(),
+        'post-sua-banner' => (new AdminBannerController())->postEditBanner(),
+        'delete-banner' => (new AdminBannerController())->deleteBanner(),
 
         // Quản lý sản phẩm
         // route thêm sản phẩm
