@@ -80,16 +80,16 @@ require_once './views/layouts/sidebar.php';
                                     <td>
 
                                         <a style="text-decoration: none;" onclick="return confirm('Bạn có xác nhận xoá sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=change-status-voucher&voucher_id=' . $voucher['id'] ?>">
-                                            <button class="btn border" title="Ẩn/hiển">
+                                            <button class="btn border btn-sm" title="Ẩn/hiển">
                                                 <?php echo $voucher['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
                                             </button> </a>
                                         <a style="text-decoration: none;" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=form-edit-voucher&voucher_id=' . $voucher['id'] ?>">
-                                            <button class="btn btn-warning" title="Sửa">
+                                            <button class="btn btn-warning btn-sm" title="Sửa">
                                                 <i class="bi bi-gear-wide-connected"></i>
                                             </button>
                                         </a>
                                         <a style="text-decoration: none;" onclick="return confirm('Bạn có xác nhận xoá sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=delete-voucher&voucher_id=' . $voucher['id'] ?>">
-                                            <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Xoá"><i class="bi bi-trash3"></i></button>
                                         </a>
 
                                     </td>

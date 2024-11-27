@@ -85,20 +85,20 @@ require_once './views/layouts/sidebar.php';
 
 
                     <a style="text-decoration: none;" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-product&id=' . $product['id'] ?>">
-                      <button class="btn btn-warning" title="Sửa">
+                      <button class="btn-sm btn btn-warning" title="Sửa">
                         <i class="bi bi-gear-wide-connected"></i>
                       </button>
                     </a>
 
 
                     <a style="text-decoration: none;" onclick="return confirm('Bạn có muốn thay đổi trạng thái sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=edit-status&id=' . $product['id'] ?>">
-                      <button class="btn border" title="Ẩn/hiển">
+                      <button class="btn-sm btn border" title="Ẩn/hiển">
                         <?php echo $product['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
                       </button>
                     </a>
 
                     <a style="text-decoration: none;" onclick="return confirm('Bạn có xác nhận xoá sản phẩm')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=delete-product&id=' . $product['id'] ?>">
-                      <button class="btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
+                      <button class="btn-sm btn btn-danger" title="Xoá"><i class="bi bi-trash3"></i></button>
                     </a>
 
                   </td>

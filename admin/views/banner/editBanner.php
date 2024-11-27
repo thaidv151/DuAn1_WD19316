@@ -9,7 +9,7 @@
     <div class="form-group">
         <label for="number_order">Số thứ tự</label>
         <input type="number" name="number_order" id="number_order" class="form-control"
-               value="<?= htmlspecialchars($banner['number_order']) ?>" >
+            value="<?= htmlspecialchars($banner['number_order']) ?>">
         <?php if (isset($_SESSION['error']['number_order'])): ?>
             <div class="text-danger"><?= $_SESSION['error']['number_order'] ?></div>
         <?php endif; ?>
@@ -34,9 +34,23 @@
     <div class="form-group">
         <label for="product_link">Liên kết sản phẩm</label>
         <input type="text" name="product_link" id="product_link" class="form-control"
-               value="<?= htmlspecialchars($banner['product_link']) ?>" >
+            value="<?= htmlspecialchars($banner['product_link']) ?>">
         <?php if (isset($_SESSION['error']['product_link'])): ?>
             <div class="text-danger"><?= $_SESSION['error']['product_link'] ?></div>
+        <?php endif; ?>
+    </div>
+    <div class="form-group">
+        <label for="product_link">Tiêu đề</label>
+        <input type="text" name="title" id="product_link" class="form-control" value="<?= $banner['title'] !== null ? htmlspecialchars($banner['title']) : "" ?>">
+        <?php if (isset($_SESSION['error']['title'])): ?>
+            <div class="text-danger"><?= $_SESSION['error']['title'] ?></div>
+        <?php endif; ?>
+    </div>
+    <div class="form-group">
+        <label for="product_link">Nội dung</label>
+        <input type="text" name="content" id="content" class="form-control" value="<?= $banner['content'] !== null ? htmlspecialchars($banner['content']) : "" ?>">
+        <?php if (isset($_SESSION['error']['content'])): ?>
+            <div class="text-danger"><?= $_SESSION['error']['content'] ?></div>
         <?php endif; ?>
     </div>
 

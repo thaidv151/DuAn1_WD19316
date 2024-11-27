@@ -7,9 +7,9 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Ecomus - Ultimate HTML</title>
+    <title>TNM Clothes</title>
 
-    <meta name="author" content="themesflat.com">
+  
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- font -->
@@ -22,13 +22,14 @@
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Favicon and Touch Icons  -->
-    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/images/logo/favicon.png">
+    <link rel="shortcut icon" href="./uploads/logo1.png">
+    <link rel="apple-touch-icon-precomposed" href="./uploads/logo1.png">
 
 
     <!-- Icons -->
     <link rel="stylesheet" href="assets/css/drift-basic.min.css">
     <link rel="stylesheet" href="assets/css/photoswipe.css">
+    <link rel="stylesheet" href="assets/css/homeView.css">
 
 </head>
 
@@ -48,7 +49,7 @@
                 <div class="row wrapper-header align-items-center">
 
                     <div class="col-xl-3 col-md-4 col-6">
-                        <a href="index.html" class="logo-header">
+                        <a href="<?= BASE_URL ?>" class="logo-header">
                             <img src="./uploads/logo1.png" alt="abc" style="width: 100px;"
                                 onerror="this.onerror=null; this.src= './uploads/user.png'" ;>
 
@@ -58,7 +59,7 @@
                         <nav class="box-navigation text-center">
                             <ul class="box-nav-ul d-flex align-items-center justify-content-center gap-30">
                                 <li class="menu-item">
-                                    <a href="#" class="item-link">Home<i class="icon icon-arrow-down"></i></a>
+                                    <a href="<?= BASE_URL ?>" class="item-link">Home </i></a>
                                 <li class="menu-item">
                                     <a href="#" class="item-link">Shop<i class="icon icon-arrow-down"></i></a>
                                     <div class="sub-menu mega-menu">
@@ -507,8 +508,30 @@
                     <div class="col-xl-3 col-md-4 col-3">
                         <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                             <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item"><i class="icon icon-search"></i></a></li>
-                            <li class="nav-account"><a href="#login" data-bs-toggle="modal" class="nav-icon-item"><i class="icon icon-account"></i></a></li>
-                            <li class="nav-wishlist"><a href="wishlist.html" class="nav-icon-item"><i class="icon icon-heart"></i><span class="count-box">0</span></a></li>
+                            <li class="nav-account">
+
+                                <?php if (isset($_SESSION['user']['avatar'])) { ?>
+                                    <img style="width: 30px; height:30px; border-radius:50%;" src="<?= $_SESSION['user']['avatar'] ?>" alt="">
+                                <?php  } else { ?>
+                                    <i class="icon icon-account"></i>
+                                    <a href="<?= BASE_URL . '?act=login' ?>" class="nav-icon-item">
+                                        <span class="account-text">Đăng nhập</span>
+                                    </a>
+                                <?php  } ?>
+
+
+                                <ul class="dropdown-menu">
+                                    <li><a href="#profile">Hồ sơ</a></li><br>
+                                 
+                                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) { ?>
+                                            <li><a href="<?= BASE_URL_ADMIN ?>">Trang quản lý</a></li><br>
+                                        <?php } ?>
+                                  
+
+                                    <li><a href="<?= BASE_URL . '?act=logout' ?>">Đăng xuất</a></li>
+                                </ul>
+                            </li>
+
                             <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i class="icon icon-bag"></i><span class="count-box">0</span></a></li>
                         </ul>
                     </div>
@@ -516,4 +539,3 @@
             </div>
         </header>
         <!-- /header -->
-       

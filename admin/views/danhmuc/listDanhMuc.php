@@ -8,7 +8,7 @@
         <div class="card-header  alert-primary">
             <h4 class="card-title">Danh sách danh mục</h4>
         </div>
-        <?php if(isset($_SESSION['success'])):?>
+        <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-info"><?= $_SESSION['success'] ?></div>
         <?php endif ?>
         <div class="card-body">
@@ -23,7 +23,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         <?php if (!empty($listDanhMuc)): ?>
                             <?php foreach ($listDanhMuc as $danhmuc): ?>
                                 <tr>
@@ -31,7 +30,13 @@
                                     <td><?= htmlspecialchars($danhmuc['category_name']) ?></td>
                                     <td><?= htmlspecialchars($danhmuc['description']) ?></td>
                                     <td>
-                                        <a href="<?= BASE_URL_ADMIN . '?act=xoa-danh-muc&id=' . $danhmuc['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">Xóa</a>
+                                        <a class="text-decoration-none" href="<?= BASE_URL_ADMIN . '?act=xoa-danh-muc&id=' . $danhmuc['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash3"></i></button>
+                                        </a>
+                                        <a class="text-decoration-none"  class="text-dark" href="<?= BASE_URL_ADMIN . '?act=form-edit-category&id=' . $danhmuc['id'] ?>">
+                                            <button class="btn btn-warning btn-sm" title="Xoá"><i class="bi bi-gear-wide-connected"></i></button>
+                                        </a>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

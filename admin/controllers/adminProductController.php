@@ -213,6 +213,7 @@
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
                 $categories = $this->modelProduct->getCategoryById($product['id']);
                 $variants = $this->modelProduct->getVariantById($product['id']);
+                
 
                 // var_dump($variants);
                 $resultQuantityById = [];
@@ -231,7 +232,6 @@
                     $totalQuantity = 0;
                 }
 
-                // debug($totalQuantity);
                 $getImageVariant = $this->modelProduct->getImageByProductId($product['id']);
 
                 if ($getImageVariant) {
@@ -244,7 +244,7 @@
                     'product_name' => $product['product_name'],
                     'total_quantity' => $totalQuantity,
                     'view' => $product['view'],
-                    'promotion_price' => $variant['promotion_price'],
+                    'promotion_price' => $variants[0]['promotion_price'],
                     'categories' => $categories,
                     'status' => $product['status'],
                     'thumbnail_variant' => $thumbnail,
