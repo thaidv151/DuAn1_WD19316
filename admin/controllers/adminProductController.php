@@ -20,9 +20,12 @@
 
 
 
+
+
+
                 $product_name = $_POST['product_name'] ?? '';
-                $price = $_POST['price'] ?? '';
                 $color = $_POST['color'] ?? '';
+                $price = $_POST['price'] ?? '';
                 $promotion_price = $_POST['promotion_price'] ?? '';
                 $product_description = $_POST['product_description'] ?? '';
                 $categories = $_POST['categories'] ?? ''; // mảng danh mục của sản phẩm
@@ -53,15 +56,27 @@
                         $errors['color'] = 'Màu sản phẩm không để trống !';
                     }
                 }
-                if ($promotion_price > $price) {
-                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+
+                foreach ($price as $key => $item) {
+                    if (empty($item)) {
+                        $errors['price'] = 'Giá sản phẩm không để trống !';
+                    } elseif (!is_numeric($price[$key])) {
+                        $errors['price'] = 'Giá sản phẩm phải là số !';
+                    }
+                    if (empty($promotion_price[$key])) {
+                        $errors['promotion_price'] = 'Giá sản phẩm không để trống !';
+                    } elseif (!is_numeric($promotion_price[$key])) {
+                        $errors['promotion_price'] = 'Giá sản phẩm phải là số !';
+                    }
+
+                    if ($promotion_price[$key] > $price[$key]) {
+                        $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+                    }
                 }
-                if (empty($price)) {
-                    $errors['price'] = 'Giá sản phẩm không để trống !';
+                foreach ($promotion_price as $key => $item) {
                 }
-                if (empty($promotion_price)) {
-                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
-                }
+
+
                 if (empty($product_description)) {
                     $errors['product_description'] = 'Mô tả không để trống !';
                 }
@@ -102,12 +117,8 @@
                 }
 
 
-                if (!is_numeric($price)) {
-                    $errors['price'] = 'Giá sản phẩm phải là số !';
-                }
-                if (!is_numeric($promotion_price)) {
-                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
-                }
+
+
                 foreach ($quantitys as $key => $size) {
                     $results = array_filter($size, function ($value) {
                         return $value > 0;
@@ -127,7 +138,7 @@
 
                 if (empty($errors)) {
 
-                    $success = $this->modelProduct->addProduct($product_name, $product_description, $price, $promotion_price);
+                    $success = $this->modelProduct->addProduct($product_name, $product_description);
 
                     // Thực hiện thêm sản phẩm vào lấy id sản phẩm vừa thêm
 
@@ -150,7 +161,7 @@
                             ];
                             $link_image[] = uploadFile($file, './uploads/');
 
-                            $success_variant =  $this->modelProduct->insertVariant($success, $color[$key], $link_image[$key]);
+                            $success_variant =  $this->modelProduct->insertVariant($success, $color[$key], $link_image[$key], $price[$key], $promotion_price[$key]);
                             // lẩy ra id của variant
                             $arr_variant[] = $success_variant;
 
@@ -181,7 +192,7 @@
                                 $this->modelProduct->insertSize($arr_variant[$key], $arr_size[$key]['quantity'][$i], $arr_size[$key]['size_id'][$i]);
                             }
                         };
-                        // đến số biến thể (variant) đc tạo thành
+                        // đếm số biến thể (variant) đc tạo thành
                         header('location:' . BASE_URL_ADMIN . '?act=list-product');
                         exit();
                     }
@@ -233,7 +244,7 @@
                     'product_name' => $product['product_name'],
                     'total_quantity' => $totalQuantity,
                     'view' => $product['view'],
-                    'promotion_price' => $product['promotion_price'],
+                    'promotion_price' => $variant['promotion_price'],
                     'categories' => $categories,
                     'status' => $product['status'],
                     'thumbnail_variant' => $thumbnail,
@@ -278,7 +289,6 @@
             $categories = $this->modelProduct->getCategoryById($product['id']); // lấy ra id danh mục của sản phẩm        
 
             $listVariantById = $this->modelProduct->getVariantById($product_id);
-
             $listVariants = [];
 
             foreach ($listVariantById as $key => $variant) {
@@ -294,6 +304,9 @@
                     'thumbnail_variant' => $variant['thumbnail_variant'],
                     'variant_album' => $listAlbumByVariantId[$key],
                     'list_size' => $liseSizeByVariantId[$key],
+                    'price' => $variant['price'],
+                    'promotion_price' => $variant['promotion_price'],
+
                 ];
             }
             require_once './views/product/formEditProduct.php';
@@ -303,49 +316,32 @@
         {
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $product_id = $_GET['id'];
 
+                $product_id = $_GET['id'];
                 $product_name = $_POST['product_name'] ?? '';
 
-                $price = $_POST['price'] ?? '';
 
-                $promotion_price = $_POST['promotion_price'] ?? '';
                 $product_description = $_POST['product_description'] ?? '';
                 $categories = $_POST['categories'] ?? ''; // mảng danh mục của sản phẩm
 
-
                 $errors = [];
-
                 if (empty($product_name)) {
                     $errors['product_name'] = 'Tên sản phẩm không để trống !';
                 }
-                if ($promotion_price > $price) {
-                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
-                }
-
-                if (empty($price)) {
-                    $errors['price'] = 'Giá sản phẩm không để trống !';
-                }
-                if (empty($promotion_price)) {
-                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
-                } else if (!is_numeric($price)) {
-                    $errors['price'] = 'Giá sản phẩm phải là số !';
-                }
                 if (empty($product_description)) {
-                    $errors['product_description'] = 'Mô tả không để trống !';
-                } else if (!is_numeric($promotion_price)) {
-                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
+                    $errors['product_description'] = 'Mô tả sản phẩm không để trống !';
                 }
-
-
 
                 if (empty($categories)) {
                     $errors['categories'] = 'Bạn phải chọn ít nhất 1 danh mục !';
                 }
-                $_SESSION['error'] = $errors;
-                if (empty($error)) {
 
-                    $this->modelProduct->editProduct($product_id, $product_name, $product_description, $price, $promotion_price);
+                $_SESSION['error'] = $errors;
+
+
+                if (empty($errors)) {
+
+                    $this->modelProduct->editProduct($product_id, $product_name, $product_description);
 
                     // Thực hiện xoá danh mục cũ
                     $success =  $this->modelProduct->deleteCategoriesById($product_id);
@@ -378,8 +374,11 @@
                 $size_id = $_POST['size_id'] ?? '';
                 $thumbnail_variant = $_FILES['thumbnail_variant'] ?? '';
                 $oldImg =  $_POST['oldImg'] ?? '';
+                $price = $_POST['price'] ?? '';
 
+                $promotion_price = $_POST['promotion_price'] ?? '';
                 $arrDelete = $_POST['arrDelete'] ?? '';
+
                 $linkArrDelete = $_POST['linkArrDelete'] ?? '';
 
                 $albums  = $_FILES['albums'] ?? '';
@@ -394,6 +393,24 @@
                     $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                 }
                 // validate mảng dữ liệu hình ảnh nhập vào
+                if ($promotion_price > $price) {
+                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+                }
+
+                if (empty($price)) {
+                    $errors['price'] = 'Giá sản phẩm không để trống !';
+                }
+                if (empty($promotion_price)) {
+                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
+                } else if (!is_numeric($price)) {
+                    $errors['price'] = 'Giá sản phẩm phải là số !';
+                }
+                if (empty($promotion_price)) {
+                    $errors['promotion_price'] = 'Mô tả không để trống !';
+                } else if (!is_numeric($promotion_price)) {
+                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
+                }
+
                 foreach ($albums['name'] as $num => $value) {
 
                     if ($albums['error'][$num] !== 0) {
@@ -449,9 +466,10 @@
                 }
 
                 $_SESSION['error'] = $errors;
-                if (empty($error)) {
 
-                    $results =  $this->modelProduct->updateVariant($variant_id, $newImg, $color);
+                if (empty($errors)) {
+
+                    $results =  $this->modelProduct->updateVariant($variant_id, $newImg, $color, $price, $promotion_price);
 
                     if (!empty($albums['name'][0])) {
                         foreach ($albums['name'] as $key => $image) {
@@ -524,6 +542,9 @@
                 $arr_size_id = $_POST['size_id'];
                 $quantitys = $_POST['quantitys'];
 
+                $price = $_POST['price'] ?? '';
+                $promotion_price = $_POST['promotion_price'] ?? '';
+
                 $errors = [];
                 $arr_size = []; // mảng chứa size và số lượng đã qua xử lý
                 $total = 0;
@@ -535,7 +556,23 @@
                     ];
                 }
 
+                if ($promotion_price > $price) {
+                    $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
+                }
 
+                if (empty($price)) {
+                    $errors['price'] = 'Giá sản phẩm không để trống !';
+                }
+                if (empty($promotion_price)) {
+                    $errors['promotion_price'] = 'Giá khuyến mãi không để trống !';
+                } else if (!is_numeric($price)) {
+                    $errors['price'] = 'Giá sản phẩm phải là số !';
+                }
+                if (empty($promotion_price)) {
+                    $errors['promotion_price'] = 'Mô tả không để trống !';
+                } else if (!is_numeric($promotion_price)) {
+                    $errors['promotion_price'] = 'Giá khuyến mãi phải là số !';
+                }
                 if (empty($color)) {
                     $errors['color'] = 'Màu sắc không để trống';
                 }
@@ -568,7 +605,7 @@
 
                 if (empty($errors)) {
                     $thumbnail_variant = uploadFile($fileUpload, './uploads/');
-                    $newVaiantId = $this->modelProduct->insertVariant($product_id, $color, $thumbnail_variant);
+                    $newVaiantId = $this->modelProduct->insertVariant($product_id, $color, $thumbnail_variant, $price, $promotion_price);
                     foreach ($arr_size as $key => $value) {
                         $addSize = $this->modelProduct->insertSize($newVaiantId, $value['quantity'], $value['size_id']);
                     }

@@ -24,23 +24,7 @@ require_once './views/layouts/sidebar.php';
                     <?php } ?>
                 </div>
 
-                <div class="form-group col-6">
-                    <label>Giá sản phẩm</label>
-                    <input value="<?= $product['price'] ?>" class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
-                    <?php if (isset($_SESSION['error']['price'])) { ?>
-                        <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
-                    <?php } ?>
-                </div>
-                <div class="form-group col-6">
-                    <label>Giá khuyến mãi
-                        <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
-                    </label>
-                    <input value="<?= $product['promotion_price'] ?>" class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
-                    <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
-                        <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
-                    <?php } ?>
-                </div>
                 <div class="form-group col-12">
                     <label>Mô tả</label>
                     <textarea class="form-control" type="text" placeholder="Mô tả" name="product_description"><?= $product['product_description'] ?></textarea>
@@ -123,7 +107,7 @@ require_once './views/layouts/sidebar.php';
 
                             <div class="col-12 row">
                                 <label for="" class="me-4 ">Albums của biến thể: </label>
-                                
+
                                 <?php if (isset($_SESSION['error']['albums'])) { ?>
                                     <p class="text-danger"> <?= $_SESSION['error']['albums'] ?> </p>
                                 <?php } ?>
@@ -152,6 +136,23 @@ require_once './views/layouts/sidebar.php';
                             <div class="col-12">
                                 <input type="file" name="albums[]" multiple class="form-control">
                             </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Giá sản phẩm</label>
+                            <input value="<?= $variant['price'] ?>" class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
+                            <?php if (isset($_SESSION['error']['price'])) { ?>
+                                <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
+                            <?php } ?>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Giá khuyến mãi
+                                <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
+
+                            </label>
+                            <input value="<?= $variant['promotion_price'] ?>" class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
+                            <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
+                                <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
+                            <?php } ?>
                         </div>
                         <div class="col-11">
                             <div class="col-6">

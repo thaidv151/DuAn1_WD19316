@@ -51,6 +51,7 @@
                                         <?php } ?>
                                     </div>
                                     <form action="<?= BASE_URL . '?act=post-login' ?>" method="POST">
+                                       
                                         <div class="mb-3">
                                             <label class="mb-1"><strong>Email</strong>
                                                 <?php if (isset($_SESSION['error']['email'])): ?>

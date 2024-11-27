@@ -28,18 +28,16 @@ class adminProductModel
             return "Error" . $e->getMessage();
         }
     }
-    public function addProduct($product_name, $product_description, $price, $promotion_price)
+    public function addProduct($product_name, $product_description)
     {
         try {
-            $sql = "INSERT INTO products (product_name, product_description, price, promotion_price, created_at) 
-            VALUES (:product_name, :product_description, :price, :promotion_price, now())";
+            $sql = "INSERT INTO products (product_name, product_description, created_at) 
+            VALUES (:product_name, :product_description, now())";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
 
                 ':product_name' => $product_name,
                 ':product_description' => $product_description,
-                ':price' => $price,
-                ':promotion_price' => $promotion_price,
 
             ]);
             return $this->conn->lastInsertId();
@@ -90,15 +88,17 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
-    public function insertVariant($product_id, $color, $thumbnail_variant)
+    public function insertVariant($product_id, $color, $thumbnail_variant, $price, $promotion_price)
     {
         try {
-            $sql = "INSERT INTO variants (product_id, color, thumbnail_variant) VALUES (:product_id, :color, :thumbnail_variant)";
+            $sql = "INSERT INTO variants (product_id, color, thumbnail_variant, price, promotion_price) VALUES (:product_id, :color, :thumbnail_variant, :price, :promotion_price)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ':product_id' => $product_id,
                 ':color' => $color,
-                ':thumbnail_variant' => $thumbnail_variant
+                ':thumbnail_variant' => $thumbnail_variant,
+                ':price' => $price,
+                ':promotion_price' => $promotion_price,
             ]);
             return $this->conn->lastInsertId();
         } catch (Exception $e) {
@@ -181,18 +181,17 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
-    public function editProduct($product_id, $product_name, $product_description, $price, $promotion_price)
+    public function editProduct($product_id, $product_name, $product_description)
     {
         try {
-            $sql = "UPDATE products SET product_name = :product_name, product_description =:product_description, price = :price, promotion_price = :promotion_price , update_at = now() WHERE id = :product_id";
+            $sql = "UPDATE products SET product_name = :product_name, product_description =:product_description, update_at = now() WHERE id = :product_id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
 
                 ':product_id' => $product_id,
                 ':product_name' => $product_name,
                 ':product_description' => $product_description,
-                ':price' => $price,
-                ':promotion_price' => $promotion_price
+            
             ]);
             return true;
         } catch (Exception $e) {
@@ -261,16 +260,18 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
-    public function updateVariant($variant_id, $thumbnail_variant, $color)
+    public function updateVariant($variant_id, $thumbnail_variant, $color, $price, $promotion_price)
     {
         try {
-            $sql = "UPDATE variants SET thumbnail_variant =:thumbnail_variant, color = :color WHERE id = :variant_id";
+            $sql = "UPDATE variants SET thumbnail_variant =:thumbnail_variant, color = :color, price = :price, promotion_price = :promotion_price WHERE id = :variant_id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
 
                 ':variant_id' => $variant_id,
                 ':thumbnail_variant' => $thumbnail_variant,
-                ':color' => $color
+                ':color' => $color,
+                ':price' => $price,
+                ':promotion_price' => $promotion_price,
             ]);
             return true;
         } catch (Exception $e) {

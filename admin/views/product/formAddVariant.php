@@ -33,12 +33,29 @@ require_once './views/layouts/sidebar.php';
                 <?php } ?>
                 <input class="form-control" type="file" name="albums[]" multiple>
             </div>
+            <div class="form-group col-6">
+                <label>Giá sản phẩm</label>
+                <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
+                <?php if (isset($_SESSION['error']['price'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
+                <?php } ?>
+            </div>
+            <div class="form-group col-6">
+                <label>Giá khuyến mãi
+                    <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
+
+                </label>
+                <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
+                <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
+                <?php } ?>
+            </div>
             <div class="form-group col-12">
                 <label>Màu sắc</label>
                 <?php if (isset($_SESSION['error']['color'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['color'] ?> </p>
                 <?php } ?>
-               
+
                 <input class="form-control" type="text" placeholder="Màu sắc" name="color">
             </div>
 

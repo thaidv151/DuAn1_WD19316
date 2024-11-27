@@ -20,13 +20,11 @@
                                         if (
                                             $orderById['order_status_id'] > $status['id']
                                             || $orderById['order_status_id'] === 6
+                                            || $orderById['order_status_id'] === 7
                                             || $orderById['order_status_id'] === 8
                                         ) {
                                             echo 'disabled';
-                                        }
-                                        if ($status['id'] === 7) {
-                                            echo 'disabled';
-                                        }
+                                        }                        
 
                                         ?>
 

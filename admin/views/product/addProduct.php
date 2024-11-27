@@ -24,7 +24,7 @@ require_once './views/layouts/sidebar.php';
 
             <div class="form-group col-6">
                 <label>Giá sản phẩm</label>
-                <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price">
+                <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price[]">
                 <?php if (isset($_SESSION['error']['price'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
                 <?php } ?>
@@ -34,14 +34,14 @@ require_once './views/layouts/sidebar.php';
                     <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
 
                 </label>
-                <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price">
+                <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price[0]">
                 <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
                 <?php } ?>
             </div>
             <div class="form-group col-12">
                 <label>Hình ảnh đại diện ( chỉ nhận file .png, .jpg, .webp, .gif )</label>
-                <input class="form-control" type="file" placeholder="Hình ảnh đại diện" name="thumbnail[]">
+                <input class="form-control" type="file" placeholder="Hình ảnh đại diện" name="thumbnail[0]">
                 <?php if (isset($_SESSION['error']['thumbnail'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['thumbnail'] ?> </p>
                 <?php } ?>
@@ -148,6 +148,23 @@ require_once './views/layouts/sidebar.php';
             <label>Màu sắc</label>
             <input class="form-control" type="text" placeholder="Màu sắc" name="color[${count}]">
         </div>
+         <div class="form-group col-12">
+                <label>Giá sản phẩm</label>
+                <input class="form-control" type="text" placeholder="Giá sản phẩm" name="price[${count}]">
+                <?php if (isset($_SESSION['error']['price'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['price'] ?> </p>
+                <?php } ?>
+            </div>
+            <div class="form-group col-12">
+                <label>Giá khuyến mãi
+                    <i style="font-weight: 600;">(Giá khuyến mãi sẽ là giá bán ra)</i>
+
+                </label>
+                <input class="form-control" type="text" placeholder="Giá khuyến mãi" name="promotion_price[${count}]">
+                <?php if (isset($_SESSION['error']['promotion_price'])) { ?>
+                    <p class="text-danger"> <?= $_SESSION['error']['promotion_price'] ?> </p>
+                <?php } ?>
+            </div>
         <div class="form-group col-12 row">
             <label class="col-3">Kích thước và số lượng biến thể</label>
             <div class="col-12 row">
