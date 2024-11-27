@@ -16,7 +16,11 @@
         <?php foreach ($banners as $banner): ?>
             <tr>
                 <td><?= htmlspecialchars($banner['number_order']) ?></td>
-                <td><img src="../uploads/<?= htmlspecialchars($banner['image_link']) ?>" width="100"></td>
+                <td>
+                <a href="<?= $banner['product_link'] ?>">
+                <img src="<?='.' . htmlspecialchars($banner['image_link']) ?>" width="100">
+                </a>    
+               </td>
                 <td><?= htmlspecialchars($banner['product_link']) ?></td>
                 <td><?= $banner['status'] ? 'Hoạt động' : 'Không hoạt động' ?></td>
                 <td>

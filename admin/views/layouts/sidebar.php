@@ -81,7 +81,7 @@
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
-                    <i class="flaticon-381-controls-3"></i>
+                    <i class="bi bi-images"></i>
                     <span class="nav-text">Banner</span>
                 </a>
                 <ul aria-expanded="false">
@@ -117,7 +117,7 @@
                     <span class="nav-text">Phiếu giảm giá</span>
                 </a>
                 <ul aria-expanded="false">
-                   
+
                     <li><a href="<?= BASE_URL_ADMIN . '?act=list-voucher' ?>">Danh sách voucher</a></li>
                     <li><a href="<?= BASE_URL_ADMIN . '?act=form-add-voucher' ?>">Thêm voucher</a></li>
                 </ul>

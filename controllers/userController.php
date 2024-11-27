@@ -128,7 +128,7 @@ class userController
                     exit();
                 } else {
                     $_SESSION['user'] = $user;
-                    header('location:' . BASE_URL_CLIENT);
+                    header('location:' . BASE_URL);
                     exit();
                 }
             } else {

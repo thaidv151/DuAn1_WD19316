@@ -10,7 +10,7 @@ require_once './controllers/homeController.php';
 require_once './controllers/userController.php';
 
 // Require toàn bộ file Models
-require_once './models/home.php';
+require_once './models/homeModel.php';
 require_once './models/userModel.php';
 
 // Route
@@ -33,5 +33,10 @@ match ($act) {
     'logout' => (new userController())->logout(),
 
 
+    'product-detail' => (new HomeController())->productDetail(),
+
+    'post-add-cart' => (new HomeController())->postAddCart(),
+
+'post-comments' => (new HomeController())->postCommet(),
     
 };
