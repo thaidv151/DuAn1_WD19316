@@ -73,4 +73,40 @@ class AdminDanhMucController
             }
         }
     }
+    public function formEditCategory(){
+        $danh_muc_id = $_GET['id'];
+        $danhMucById= $this->modelDanhmuc->getDanhMucById($danh_muc_id);
+
+        // debug($danhMucById);
+
+        require './views/danhmuc/formEidtDanhMuc.php';
+        delteSessionError();
+    }
+    public function postEditCategory(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['category_id'];
+            $ten_danh_muc = $_POST['category_name'];
+            $description = $_POST['description'] ?? ''; // Thêm mô tả từ form
+            $status = $_POST['status'] ?? 1; // Trạng thái mặc định là 1 (hoặc giá trị bạn muốn)
+
+            $errors = [];
+            if (empty($ten_danh_muc)) {
+                $errors['category_name'] = 'Tên danh mục không để trống';
+            }
+            if (empty($errors)) {
+                $success = $this->modelDanhmuc->updateDanhMuc($id, $ten_danh_muc, $description);
+                if($success){
+                    $_SESSION['success'] = 'Cập nhật thành công';
+                    header("Location:" . BASE_URL_ADMIN . '?act=danh-muc');
+                    exit();
+                }
+               
+            } else {
+                $_SESSION['error'] = $errors;
+                $_SESSION['flash'] = true;
+                header("Location:" . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
+        }
+    }
 }

@@ -14,6 +14,7 @@ class AdminBannerController
     {
         $banners = $this->modelBanner->getAllBanners();
         require_once './views/banner/listBanner.php';
+        delteSessionError();
     }
 
     // Hiển thị form thêm banner
@@ -30,6 +31,8 @@ class AdminBannerController
             // Lấy thông tin từ form
             $number_order = $_POST['number_order'] ?? '';
             $product_link = $_POST['product_link'] ?? '';
+            $title = $_POST['title'] ?? '';
+            $content = $_POST['content'] ?? '';
             $status = $_POST['status'] ?? 1; // Giá trị mặc định là '1' (Hoạt động)
             $image_link = $_FILES['image_link'];
             $errors = [];
@@ -42,6 +45,12 @@ class AdminBannerController
             }
             if (empty($product_link)) {
                 $errors['product_link'] = 'Liên kết sản phẩm không được để trống';
+            }
+            if (empty($title)) {
+                $errors['title'] = 'Tiêu đề không được để trống';
+            }
+            if (empty($content)) {
+                $errors['content'] = 'Nội dung không được để trống';
             }
 
             // Xử lý upload hình ảnh
@@ -58,7 +67,7 @@ class AdminBannerController
             // Nếu không có lỗi, thêm banner vào cơ sở dữ liệu
             if (empty($errors)) {
                 $newImage = uploadFile($image_link, './uploads/');
-                $success = $this->modelBanner->insertBanner($number_order, $newImage, $product_link, $status);
+                $success = $this->modelBanner->insertBanner($number_order, $newImage, $product_link, $status, $title, $content);
                 if ($success) {
                     $_SESSION['success'] = 'Thêm banner thành công';
                     header("Location: " . BASE_URL_ADMIN . "?act=list-banner");
@@ -90,6 +99,8 @@ class AdminBannerController
             $number_order = $_POST['number_order'];
             $product_link = $_POST['product_link'];
             $status = $_POST['status'];
+            $content = $_POST['content'];
+            $title = $_POST['title'];
             $image_link = $_FILES['image_link'];
             $old_image = $_POST['old_image'];
 
@@ -119,13 +130,19 @@ class AdminBannerController
             if (empty($product_link)) {
                 $errors['product_link'] = 'Link sản phẩm không để trống';
             }
-
+            if (empty($title)) {
+                $errors['title'] = 'Tiêu đề không được để trống';
+            }
+            if (empty($content)) {
+                $errors['content'] = 'Nội dung không được để trống';
+            }
 
 
 
             if (empty($errors)) {
-                $success = $this->modelBanner->updateBanner($id, $number_order, $newImage, $product_link, $status);
+                $success = $this->modelBanner->updateBanner($id, $number_order, $newImage, $product_link, $status, $title, $content);
                 if ($success) {
+                    $_SESSION['success'] = 'Cập nhật thành công';
                     header("Location: " . BASE_URL_ADMIN . "?act=list-banner");
                     exit();
                 }

@@ -37,6 +37,6 @@ match ($act) {
 
     'post-add-cart' => (new HomeController())->postAddCart(),
 
-'post-comments' => (new HomeController())->postCommet(),
+'post-comments' => (new HomeController())->postComment(),
     
 };

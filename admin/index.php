@@ -40,6 +40,8 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
         'form-them-danh-muc' => (new adminDanhMucController())->formThemDanhMuc(),
         'them-danh-muc' => (new adminDanhMucController())->postAddDanhMuc(),
         'xoa-danh-muc' => (new adminDanhMucController())->deleteDanhMuc(),
+        'form-edit-category' => (new AdminDanhMucController())->formEditCategory(),
+        'post-sua-danh-muc' => (new AdminDanhMucController())->postEditCategory(),
         // Quản lý banner
         'list-banner' => (new AdminBannerController())->listBanner(),
         'add-banner' => (new AdminBannerController())->fromAddBanner(),

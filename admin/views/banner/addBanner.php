@@ -12,9 +12,23 @@
 
     <div class="form-group">
         <label for="product_link">Liên kết sản phẩm</label>
-        <input type="text" name="product_link" id="product_link" class="form-control" value="<?= isset($product_link) ? $product_link : '' ?>" >
+        <input type="text" name="product_link" id="product_link" class="form-control" >
         <?php if (isset($_SESSION['error']['product_link'])): ?>
             <div class="text-danger"><?= $_SESSION['error']['product_link'] ?></div>
+        <?php endif; ?>
+    </div>
+    <div class="form-group">
+        <label for="product_link">Tiêu đề</label>
+        <input type="text" name="title" id="product_link" class="form-control" >
+        <?php if (isset($_SESSION['error']['title'])): ?>
+            <div class="text-danger"><?= $_SESSION['error']['title'] ?></div>
+        <?php endif; ?>
+    </div>
+    <div class="form-group">
+        <label for="product_link">Nội dung</label>
+        <input type="text" name="content" id="content" class="form-control" >
+        <?php if (isset($_SESSION['error']['content'])): ?>
+            <div class="text-danger"><?= $_SESSION['error']['content'] ?></div>
         <?php endif; ?>
     </div>
 

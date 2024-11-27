@@ -25,17 +25,19 @@ class AdminBanner
 
     // Thêm banner
    // Thêm banner mới
-   public function insertBanner($number_order, $image_link, $product_link, $status)
+   public function insertBanner($number_order, $image_link, $product_link, $status, $title, $content)
    {
        try {
-           $sql = "INSERT INTO banners (number_order, image_link, product_link, status) 
-                   VALUES (:number_order, :image_link, :product_link, :status)";
+           $sql = "INSERT INTO banners (number_order, image_link, product_link, status, title, content) 
+                   VALUES (:number_order, :image_link, :product_link, :status, :title, :content)";
            $stmt = $this->conn->prepare($sql);
            $stmt->execute([
                ':number_order' => $number_order,
                ':image_link' => $image_link,
                ':product_link' => $product_link,
-               ':status' => $status
+               ':status' => $status,
+               ':title' => $title,
+               ':content' => $content,
            ]);
            return true;
        } catch (PDOException $e) {
@@ -60,14 +62,16 @@ class AdminBanner
     }
 
     // Cập nhật banner
-    public function updateBanner($id, $number_order, $image_link, $product_link, $status)
+    public function updateBanner($id, $number_order, $image_link, $product_link, $status, $title, $content)
     {
         try {
             $sql = "UPDATE banners 
                     SET number_order = :number_order, 
                         image_link = :image_link, 
                         product_link = :product_link, 
-                        status = :status 
+                        status = :status, 
+                        title = :title, 
+                        content = :content 
                     WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
@@ -75,7 +79,9 @@ class AdminBanner
                 ':image_link' => $image_link,
                 ':product_link' => $product_link,
                 ':status' => $status,
-                ':id' => $id
+                ':id' => $id,
+                ':title' => $title,
+                ':content' => $content,
             ]);
             return true;
         } catch (PDOException $e) {
