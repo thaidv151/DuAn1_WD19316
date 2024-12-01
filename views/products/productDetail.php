@@ -1,6 +1,9 @@
 <?php require_once './views/layouts/header.php'; ?>
 
 <div class="container">
+    <?php if (isset($_SESSION['success'])) { ?>
+        <div class="alert alert-info"><?= $_SESSION['success'] ?></div>
+    <?php } ?>
     <div class="row">
         <div class="col-md-6">
             <div class="tf-product-media-wrap sticky-top">
@@ -9,10 +12,12 @@
                         <div class="swiper-wrapper stagger-wrap ">
                             <!-- beige -->
                             <div class="swiper-slide stagger-item" data-color="beige">
-
+                                <div class="item" onclick="thumbnail(0)">
+                                    <img class="lazyload newThumbnail" data-src="<?= $variant['thumbnail_variant'] ?>" src="<?= $variant['thumbnail_variant'] ?>" alt="img-product">
+                                </div>
                                 <?php foreach ($album_variant as $key => $item): ?>
-                                    <div class="item" onclick="thumbnail(<?= $key ?>)">
-                                        <img class="lazyload newThumbnail" data-src="<?= $item['link_image'] ?>" src="<?= $item['link_image'] ?>" alt="img-product">
+                                    <div class="item" onclick="thumbnail(<?= $key + 1 ?>)">
+                                        <img class="mt-2 lazyload newThumbnail" data-src="<?= $item['link_image'] ?>" src="<?= $item['link_image'] ?>" alt="img-product">
                                     </div>
                                 <?php endforeach ?>
                             </div>
@@ -35,7 +40,9 @@
         <div class="col-md-6">
             <div class="tf-product-info-wrap position-relative">
                 <div class="tf-zoom-main"></div>
-                <form action="<?= BASE_URL . '?act=post-add-cart' ?>" method="POST">
+                <form action="<?= BASE_URL . '?act=add-to-cart' ?>" method="POST">
+                    <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                    <input type="hidden" name="variant_id" value="<?= $variant_id ?>">
                     <div class="tf-product-info-list other-image-zoom">
                         <div class="tf-product-info-title">
                             <h5><?= $product['product_name'] ?></h5>
@@ -71,8 +78,12 @@
                             <div class="variant-picker-item">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="variant-picker-label">
+                                        <?php if (isset($_SESSION['error']['size_id'])) { ?>
+                                            <p class="text-danger"><?= $_SESSION['error']['size_id'] ?></p>
+                                        <?php } ?>
                                         Size: <span class="fw-6 variant-picker-label-value">S</span>
                                     </div>
+
                                 </div>
 
                                 <div class="row text-center">
@@ -82,7 +93,7 @@
                                             <label>
                                                 <p><?= $item['size'] ?></p>
                                             </label>
-                                            <input <?= $item['quantity_size'] === 0 ? 'disabled' : "" ?> class="form-check-input bg-success" style="width: 25px; height:25px" type="radio" name="size" onclick="checkQuantity('<?= $item['size'] ?>')" value="<?= $item['size'] ?>">
+                                            <input <?= $item['quantity_size'] === 0 ? 'disabled' : "" ?> class="form-check-input bg-success" style="width: 25px; height:25px" type="radio" name="size_id" onclick="checkQuantity('<?= $item['size'] ?>')" value="<?= $item['id'] ?>">
 
                                         </div>
                                     <?php endforeach ?>
@@ -93,6 +104,9 @@
                             <div class="quantity-title fw-6">
                                 <p>Instock: </p>
                                 <p class="quantitySize"></p>
+                                <?php if (isset($_SESSION['error']['quantity'])) { ?>
+                                            <p class="text-danger"><?= $_SESSION['error']['quantity'] ?></p>
+                                        <?php } ?>
                             </div>
                             <div class="quantity-title fw-6">Quantity: </div>
                             <div class="wg-quantity">
@@ -104,7 +118,7 @@
                         <div>
                             <button name="addToCart" type="submit" class="mb-3 tf-btn btn-fill justify-content-center fw-6 fs-16 col-12 flex-grow-1 animate-hover-btn btn-add-to-cart bg-success">Add to cart <i class="bi bi-basket ms-2 fs-4"></i> </button>
 
-                            <button name="buyNow" type="submit" class="tf-btn btn-fill justify-content-center fw-6 fs-16 col-12 flex-grow-1 animate-hover-btn btn-add-to-cart bg-warning">Buy now <i class="bi bi-cash-coin ms-4 pt-2 fs-4"></i></button>
+                            <button name="redirect" type="submit" class="tf-btn btn-fill justify-content-center fw-6 fs-16 col-12 flex-grow-1 animate-hover-btn btn-add-to-cart bg-warning">Buy now <i class="bi bi-cash-coin ms-4 pt-2 fs-4"></i></button>
 
                         </div>
                 </form>
@@ -127,7 +141,7 @@
 
                                     <div class="reply-comment cancel-review-wrap">
                                         <div class="d-flex mb_24 gap-20 align-items-center justify-content-between flex-wrap">
-                                            <h5 class=""><?= count($listComments) ?> Comments</h5>
+                                            <h5 class="">Comments</h5>
                                             <div class="d-flex align-items-center gap-12">
                                                 <div class="tab-reviews-heading">
                                                     <div>
@@ -139,20 +153,91 @@
                                         </div>
                                         <div class="reply-comment-wrap">
                                             <?php foreach ($listComments as $key => $item): ?>
-                                                <div class="reply-comment-item">
-                                                    <div class="user">
-                                                        <div>
-                                                            <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                <?php if (isset($_SESSION['user'])) { ?>
+                                                    <?php if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) { ?>
+                                                        <div class="reply-comment-item">
+                                                            <div class="user position-relative">
+                                                                <div>
+                                                                    <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                                </div>
+                                                                <div>
+                                                                    <h6>
+                                                                        <p><?= $item['username'] ?></p>
+                                                                    </h6>
+                                                                    <div class="day text_black-3"><?= $item['created_at'] ?></div>
+                                                                </div>
+                                                                <?php if (isset($_SESSION['user'])) { ?>
+                                                                    <?php if ($_SESSION['user']['id'] === 1 || $_SESSION['user']['id'] === 0) { ?>
+                                                                        <div class="d-flex position end-0 position-absolute">
+                                                                            <a title="Ẩn/hiện" href="<?= BASE_URL . '?act=change-status-comment&id=' . $item['id'] ?>">
+                                                                                <button class="btn border <?= $item['status'] ? 'btn-success' : 'btn-danger' ?>">
+                                                                                    <?= $item['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
+
+                                                                                </button>
+                                                                            </a>
+                                                                        </div>
+                                                                    <?php } ?>
+                                                                <?php } ?>
+
+                                                            </div>
+
+                                                            <p class="text_black-3 form-control"><?= $item['content'] ?></p>
                                                         </div>
-                                                        <div>
-                                                            <h6>
-                                                                <p><?= $item['username'] ?></p>
-                                                            </h6>
-                                                            <div class="day text_black-3"><?= $item['created_at'] ?></div>
+                                                    <?php } else { ?>
+                                                        <?php if ($item['status'] === 1) { ?>
+                                                            <div class="reply-comment-item">
+                                                                <div class="user position-relative">
+                                                                    <div>
+                                                                        <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                                    </div>
+                                                                    <div>
+                                                                        <h6>
+                                                                            <p><?= $item['username'] ?></p>
+                                                                        </h6>
+                                                                        <div class="day text_black-3"><?= $item['created_at'] ?></div>
+                                                                    </div>
+                                                                    <?php if (isset($_SESSION['user'])) { ?>
+                                                                        <?php if ($_SESSION['user']['role_id'] === 2 && $_SESSION['user']['id'] === $item['user_id']){  ?>
+                                                                            <div class="d-flex position end-0 position-absolute">
+                                                                                <a title="Xoá binh luận" href="<?= BASE_URL . '?act=delete-comment&id=' . $item['id'] ?>">
+                                                                                    <button class="btn border btn-danger">
+                                                                                    <i class="bi bi-trash3"></i>
+                                                                                    </button>
+                                                                                </a>
+                                                                            </div>
+                                                                        <?php } ?>
+                                                                    <?php } ?>
+
+                                                                </div>
+                                                                <p class="text_black-3 form-control"><?= $item['content'] ?></p>
+                                                            </div>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                <?php } else { ?>
+                                                    <?php if ($item['status'] === 1) { ?>
+                                                        <div class="reply-comment-item">
+                                                            <div class="user position-relative">
+                                                                <div>
+                                                                    <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                                </div>
+                                                                <div>
+                                                                    <h6>
+                                                                        <p><?= $item['username'] ?></p>
+                                                                    </h6>
+                                                                    <div class="day text_black-3"><?= $item['created_at'] ?></div>
+                                                                </div>
+                                                            
+
+                                                            </div>
+                                                            <p class="text_black-3 form-control"><?= $item['content'] ?></p>
                                                         </div>
-                                                    </div>
-                                                    <p class="text_black-3 form-control"><?= $item['content'] ?></p>
-                                                </div>
+                                                    <?php } ?>
+                                                <?php } ?>
+
+
+
+
                                             <?php endforeach ?>
 
 
@@ -270,13 +355,12 @@
                                                             <?php endfor ?>
                                                             <div>
                                                                 <p>
-                                                                <?= $item['color'] ?> :  <?= $item['size'] ?>
-                                                               
+                                                                    <?= $item['color'] ?> : <?= $item['size'] ?>
+
                                                                 </p>
                                                                 <div>
-                                                                <img style="width: 30px;" src="<?= $item['thumbnail_variant']  ?>" alt=""
-                                                                onerror="this.onerror=null; this.src='./uploads/logo1.png'";
-                                                                >
+                                                                    <img style="width: 30px;" src="<?= $item['thumbnail_variant']  ?>" alt=""
+                                                                        onerror="this.onerror=null; this.src='./uploads/logo1.png'" ;>
 
                                                                 </div>
                                                             </div>

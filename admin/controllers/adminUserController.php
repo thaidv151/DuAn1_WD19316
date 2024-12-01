@@ -1,10 +1,10 @@
 <?php
 class adminUserController
 {
-    public $mdoelUser;
+    public $modelUser;
     public function __construct()
     {
-        $this->mdoelUser = new adminUserModel;
+        $this->modelUser = new adminUserModel;
     }
     public function formEditProfile()
     {
@@ -89,9 +89,9 @@ class adminUserController
                 } else {
                     $newAvatar = $user['avatar'];
                 }
-                $user_id = $this->mdoelUser->updateUser($user['id'], $username, $phone, $date_of_birth, $gender, $newAvatar, $newPass);
+                $user_id = $this->modelUser->updateUser($user['id'], $username, $phone, $date_of_birth, $gender, $newAvatar, $newPass);
                
-                $_SESSION['user'] = $this->mdoelUser->getUserById($user_id);
+                $_SESSION['user'] = $this->modelUser->getUserById($user_id);
                 $_SESSION['success'] = 'Cập nhật thành công';
                 header('location:' . BASE_URL_ADMIN . '?act=edit-profile');
                 exit();
@@ -104,19 +104,19 @@ class adminUserController
         }
     }
     public function listUserAdmin(){
-        $listUserAdmin = $this->mdoelUser->getAllUserAdmin();
+        $listUserAdmin = $this->modelUser->getAllUserAdmin();
         require_once './views/user/listUserAdmin.php';
         delteSessionError();
     }
     public function changeRole(){
         $user_id = $_GET['user_id'];
-        $user = $this->mdoelUser->getUserById($user_id);
+        $user = $this->modelUser->getUserById($user_id);
         if($user['role_id'] === 1){
             $newRoleId = 2;
         }else{
             $newRoleId = 1;
         }
-        $success = $this->mdoelUser->changeRole($user_id, $newRoleId);
+        $success = $this->modelUser->changeRole($user_id, $newRoleId);
         if($success){
             $_SESSION['success'] = 'Thay đổi quyền hạng cho '. $user['username'] . ' thành công!!';
             header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
@@ -130,14 +130,14 @@ class adminUserController
     public function changeStatusUser(){
         $user_id = $_GET['user_id'];
         $from = $_GET['from'] ?? '';
-        $user = $this->mdoelUser->getUserById($user_id);
+        $user = $this->modelUser->getUserById($user_id);
         if($user['status'] === 1){
             $newStatus = 0;
         }else{
             $newStatus = 1;
         }
         
-        $success = $this->mdoelUser->changeStatusUser($user_id, $newStatus);
+        $success = $this->modelUser->changeStatusUser($user_id, $newStatus);
         if($success){
             $_SESSION['success'] = 'Thay đổi trạng thái cho '. $user['username'] . ' thành công!!';
             if(!empty($from)){
@@ -154,7 +154,7 @@ class adminUserController
         }
     }
     public function listUserClient(){
-        $listUserAdmin = $this->mdoelUser->getAllUserClient();
+        $listUserAdmin = $this->modelUser->getAllUserClient();
         require_once './views/user/listUserClient.php';
         delteSessionError();
     }

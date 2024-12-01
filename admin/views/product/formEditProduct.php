@@ -116,10 +116,10 @@ require_once './views/layouts/sidebar.php';
 
 
 
-                                        <div class="col-2 card ms-3">
-                                            <div class="card-image-top d-flex">
-                                                <img width="100px" src="<?= '.' . $item['link_image'] ?>" alt="" onerror="this.onerror=null; this.src= '../uploads/logo.png'" ;>
-                                                <input class="position-absolute top-50 end-0 translate-middle" type="checkbox" name="arrDelete[]" id="" value="<?= $item['id'] ?>">
+                                        <div class="col-sm-1 card ms-3">
+                                            <div class="position-relative">
+                                                <img width="120px" src="<?= '.' . $item['link_image'] ?>" alt="" onerror="this.onerror=null; this.src= '../uploads/logo.png'" ;>
+                                                <input style="width:18px; height:18px; " class="position-absolute mt-2 ms-2 top-0 end-20 translate-middle" type="checkbox" name="arrDelete[]" id="" value="<?= $item['id'] ?>">
                                             </div>
 
                                         </div>

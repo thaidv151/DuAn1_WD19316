@@ -160,8 +160,9 @@ class AdminBannerController
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
+            $getBannerById = $this->modelBanner->getBannerById($id);
+            deleteFile($getBannerById['image_link']);
             $success = $this->modelBanner->deleteBanner($id);
-
             header("Location: " . BASE_URL_ADMIN . "?act=list-banner");
             exit();
         }

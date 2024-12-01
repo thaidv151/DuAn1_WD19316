@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <title>TNM Clothes</title>
 
-  
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- font -->
@@ -507,7 +507,20 @@
                     </div>
                     <div class="col-xl-3 col-md-4 col-3">
                         <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
-                            <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item"><i class="icon icon-search"></i></a></li>
+                            <li class="nav-search"><div data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item">
+
+
+                                    <form action="<?= BASE_URL  ?>" method="POST" id="formSearch" class="form-group">
+                                        <input style="height: 30px;" class="form-control" type="text" name="inpSearch" id="inpSearch" placeholder="search....">
+                                    </form>
+
+                                    <p>
+                                        <button class="btn btn-submit-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="icon icon-search"></i>
+                                        </button>
+                                    </p>
+
+                                </div></li>
                             <li class="nav-account">
 
                                 <?php if (isset($_SESSION['user']['avatar'])) { ?>
@@ -519,23 +532,33 @@
                                     </a>
                                 <?php  } ?>
 
+                                <?php if (isset($_SESSION['user'])) { ?>
+                                    <ul class="dropdown-menu">
 
-                                <ul class="dropdown-menu">
-                                    <li><a href="#profile">Hồ sơ</a></li><br>
-                                 
-                                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) { ?>
+                                        <li><a href="<?= $_SESSION['user']['role_id'] === 2 ? BASE_URL . '?act=edit-profile' : BASE_URL_ADMIN . '?act=edit-profile' ?>">Hồ sơ</a></li><br>
+
+
+                                        <?php if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) { ?>
                                             <li><a href="<?= BASE_URL_ADMIN ?>">Trang quản lý</a></li><br>
                                         <?php } ?>
-                                  
 
-                                    <li><a href="<?= BASE_URL . '?act=logout' ?>">Đăng xuất</a></li>
-                                </ul>
+
+
+                                        <li><a href="<?= BASE_URL . '?act=logout' ?>">Đăng xuất</a></li>
+
+                                    </ul>
+                                <?php } ?>
                             </li>
 
-                            <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i class="icon icon-bag"></i><span class="count-box">0</span></a></li>
+                            <li class="nav-cart">
+                                <a href="<?= BASE_URL . '?act=view-cart' ?>" class="nav-icon-item">
+                                    <i class="icon icon-bag"></i><span class="count-box"><?= isset($_SESSION['count_cart']) ? $_SESSION['count_cart'] : '0' ?></span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </header>
         <!-- /header -->
+  

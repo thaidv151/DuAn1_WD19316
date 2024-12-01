@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 // Require file Common
@@ -8,10 +8,14 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 // Require toàn bộ file Controllers
 require_once './controllers/homeController.php';
 require_once './controllers/userController.php';
+require_once './controllers/cartController.php';
+require_once './controllers/paymentController.php';
 
 // Require toàn bộ file Models
 require_once './models/homeModel.php';
+require_once './models/cartModel.php';
 require_once './models/userModel.php';
+require_once './models/paymentModel.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -32,11 +36,33 @@ match ($act) {
 
     'logout' => (new userController())->logout(),
 
+    'edit-profile' => (new userController())->formEditProfile(),
+
+    'post-edit-profile' => (new userController())->postEditProfile(),
+  
 
     'product-detail' => (new HomeController())->productDetail(),
 
     'post-add-cart' => (new HomeController())->postAddCart(),
 
-'post-comments' => (new HomeController())->postComment(),
+    'post-comments' => (new HomeController())->postComment(),
+
+    // 'payment-method' => (new PaymentController())->paymentVNPAY(),
     
+    'thanks' => (new PaymentController())->returnByPayment(),
+
+    'view-cart' => (new cartController())->viewListCart(),
+
+    'delete-cart' => (new cartController())->deleteCart(),
+
+    'add-to-cart' => (new cartController())->addToCart(),
+
+    'form-check-out' => (new paymentController())->formCheckOut(),
+
+    'post-check-out' => (new paymentController())->postCheckOut(),
+
+    'change-status-comment' => (new HomeController())->changeStatusCommentById(),
+
+    'delete-comment' => (new HomeController())->deleteComment(),
+
 };
