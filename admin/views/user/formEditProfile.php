@@ -92,7 +92,6 @@ require_once './views/layouts/sidebar.php';
                                 <option <?= $_SESSION['user']['gender'] === 'Nam' ? 'selected' : '' ?> value="Nam">Nam</option>
                                 <option <?= $_SESSION['user']['gender'] === 'Nữ' ? 'selected' : '' ?> value="Nữ">Nữ</option>
                                 <option <?= $_SESSION['user']['gender'] === 'Khác' ? 'selected' : '' ?> value="Khác">Khác</option>
-
                             </select>
                         </div>
                         <div class="col-sm-6 m-b30">
@@ -155,15 +154,3 @@ require_once './views/layouts/sidebar.php';
 
 
 <?php require_once './views/layouts/footer.php'; ?>
-<!-- <script>
-    const insertFormResetPass = () => {
-        const buttonResetPass = document.querySelector('#buttonResetPass');
-        buttonResetPass.style.display = 'none';
-        const insertForm = document.querySelector('.insertForm');
-        const div = document.createElement('div');
-        div.innerHTML = `
-           
-        `;
-        insertForm.append(div);
-    }
-</script> -->

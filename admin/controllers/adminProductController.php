@@ -18,11 +18,6 @@
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-
-
-
-
-
                 $product_name = $_POST['product_name'] ?? '';
                 $color = $_POST['color'] ?? '';
                 $price = $_POST['price'] ?? '';
@@ -39,10 +34,6 @@
                         'quantity' => $value
                     ];
                 };
-
-
-
-
 
                 $thumbnails = $_FILES['thumbnail'];
                 $errors = [];
@@ -73,8 +64,7 @@
                         $errors['promotion_price'] = 'Giá bán ra cần nhỏ hơn giá gốc';
                     }
                 }
-                foreach ($promotion_price as $key => $item) {
-                }
+                
 
 
                 if (empty($product_description)) {
@@ -94,7 +84,7 @@
                         $errors['thumbnail'] = 'Kích cỡ ảnh không lớn hơn 2.5MB';
                     }
                 }
-
+              
                 foreach ($albums['name'] as $key => $value) {
                     $file_albums = [
                         'name' => $albums['name'][$key],
@@ -116,7 +106,7 @@
                     };
                 }
 
-
+                
 
 
                 foreach ($quantitys as $key => $size) {
@@ -166,33 +156,34 @@
                             $arr_variant[] = $success_variant;
 
                             // thêm album theo biến thể
-                            $file_albums = [
+                          
+                            $itemAlbums = [
                                 'name' => $albums['name'][$key],
                                 'type' => $albums['type'][$key],
                                 'tmp_name' => $albums['tmp_name'][$key],
                                 'error' => $albums['error'][$key],
                                 'size' => $albums['size'][$key],
                             ];
-                            foreach ($file_albums['name'] as $num => $item) {
-                                $file_album = [
-                                    'name' => $file_albums['name'][$num],
-                                    'type' => $file_albums['type'][$num],
-                                    'tmp_name' => $file_albums['tmp_name'][$num],
-                                    'error' => $file_albums['error'][$num],
-                                    'size' => $file_albums['size'][$num],
+                            foreach ($itemAlbums['name'] as $num => $item) {
+                                $file_item_album = [
+                                    'name' => $itemAlbums['name'][$num],
+                                    'type' => $itemAlbums['type'][$num],
+                                    'tmp_name' => $itemAlbums['tmp_name'][$num],
+                                    'error' => $itemAlbums['error'][$num],
+                                    'size' => $itemAlbums['size'][$num],
                                 ];
-                                $link_image_album[] = uploadFile($file_album, './uploads/');
-
-                                $this->modelProduct->insertAlbum($success_variant, $link_image_album[$num]);
+                              
+                                $link_image_album = uploadFile($file_item_album, './uploads/');
+                            
+                                $this->modelProduct->insertAlbum($success_variant, $link_image_album);
                             };
-
 
                             $count_for_size = count($arr_size[$key]['size_id']);
                             for ($i = 0; $i < $count_for_size; $i++) {
                                 $this->modelProduct->insertSize($arr_variant[$key], $arr_size[$key]['quantity'][$i], $arr_size[$key]['size_id'][$i]);
                             }
                         };
-                        // đếm số biến thể (variant) đc tạo thành
+                      
                         header('location:' . BASE_URL_ADMIN . '?act=list-product');
                         exit();
                     }
@@ -213,7 +204,7 @@
             foreach (isset($resultProducts) ? $resultProducts : $products as $key => $product) {
                 $categories = $this->modelProduct->getCategoryById($product['id']);
                 $variants = $this->modelProduct->getVariantById($product['id']);
-                
+
 
                 // var_dump($variants);
                 $resultQuantityById = [];
@@ -231,7 +222,9 @@
                 } else {
                     $totalQuantity = 0;
                 }
-
+                if (!isset($variants[0]['promotion_price'])) {
+                    $variants[0]['promotion_price'] = 0;
+                }
                 $getImageVariant = $this->modelProduct->getImageByProductId($product['id']);
 
                 if ($getImageVariant) {
@@ -241,6 +234,7 @@
                 }
                 $listProducts[] = [
                     'id' => $product['id'],
+                    'variant_id' => $getImageVariant['variant_id'],
                     'product_name' => $product['product_name'],
                     'total_quantity' => $totalQuantity,
                     'view' => $product['view'],
@@ -295,7 +289,9 @@
 
                 $liseSizeByVariantId[] = $this->modelProduct->getListSizeByVariantId($variant['id']);
                 $listAlbumByVariantId[] = $this->modelProduct->getlistAlbumByVariantId($variant['id']);
-
+                if (empty($liseSizeByVariantId[$key])) {
+                    $liseSizeByVariantId[$key]['quantity_size'] = [0, 0, 0, 0, 0];
+                }
 
                 $listVariants[] = [
                     'id' => $variant['id'],
@@ -309,6 +305,7 @@
 
                 ];
             }
+
             require_once './views/product/formEditProduct.php';
             delteSessionError();
         }
@@ -503,6 +500,52 @@
         public function deleteProduct()
         {
             $product_id = $_GET['id'];
+            $listOrderById = $this->modelProduct->getAllOrderById($product_id);
+
+            $listCommetById = $this->modelProduct->getAllCommentById($product_id);
+            $listReviewById = $this->modelProduct->getAllReviewById($product_id);
+
+            if (empty($listCommetById) && empty($listOrderById) && empty($listReviewById)) {
+                $getListVariantById = $this->modelProduct->getVariantById($product_id);
+                if (!empty($getListVariantById[0])) {
+                    foreach ($getListVariantById as $key => $item) {
+                        $listAlbumByVariantId = $this->modelProduct->getlistAlbumByVariantId($item['id']);
+                        
+                        if(!empty($item['thumbnail_variant'])){
+                            deleteFile($item['thumbnail_variant']);
+                        }
+                        if(!empty($listAlbumByVariantId[0])) {
+                            foreach ($listAlbumByVariantId as $key => $value) {
+                         
+                                deleteFile($value['link_image']);
+                            }
+                        }
+                  
+                        
+                    
+                        $this->modelProduct->deleteAlbumById($item['id']);
+                        $this->modelProduct->deleteAllSizeById($item['id']);
+                        $this->modelProduct->deleteVariantById($item['id']);
+                    }
+                }
+                $this->modelProduct->deleteCategoriesById($product_id);
+                $success = $this->modelProduct->deleteProductById($product_id);
+
+                if ($success) {
+                    $_SESSION['success'] = 'Xoá thành công!';
+                    header('location:' . $_SERVER['HTTP_REFERER']);
+                    exit();
+                } else {
+                    $_SESSION['success'] = 'Xoá thất bại!';
+                    header('location:' . $_SERVER['HTTP_REFERER']);
+                    exit();
+                }
+            } else {
+                $_SESSION['success'] = 'Sản phẩm tồn đã có tương tác không thể xoá';
+                header('location:' . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
+            // $success = $this->modelProduct->deleteProductById();
         }
         public function deleteVariant()
         {

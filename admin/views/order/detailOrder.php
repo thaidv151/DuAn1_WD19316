@@ -104,7 +104,11 @@
                                     <td class="right"> <?= number_format($subTotal) ?> VND</td>
                                 </tr>
                                 <tr>
-                                    <td class="left"><strong>Discount (<?php echo !isset($voucher['discount_value']) ? $voucher['disscount_value']  : '0' ?>%)</strong></td>
+                                    <td class="left"><strong>Shipping</strong></td>
+                                    <td class="right"> <?= number_format($shipping) ?> VND</td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>Discount (<?php echo isset($voucher['discount_value']) ? $voucher['disscount_value']  : '0' ?>%)</strong></td>
                                     <td class="right"> <?= number_format($disscount) ?> VND</td>
                                 </tr>
                                

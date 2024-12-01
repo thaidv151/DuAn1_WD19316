@@ -144,7 +144,7 @@ class adminProductModel
     public function getImageByProductId($id)
     {
         try {
-            $sql = "SELECT thumbnail_variant FROM variants 
+            $sql = "SELECT id as variant_id ,thumbnail_variant FROM variants 
              WHERE product_id = '$id' LIMIT 1";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
@@ -191,7 +191,7 @@ class adminProductModel
                 ':product_id' => $product_id,
                 ':product_name' => $product_name,
                 ':product_description' => $product_description,
-            
+
             ]);
             return true;
         } catch (Exception $e) {
@@ -337,6 +337,19 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
+    public function deleteProductById($id)
+    {
+        try {
+            $sql = "DELETE FROM products WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':id' => $id
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
     public function deleteAllSizeById($variant_id)
     {
         try {
@@ -359,6 +372,48 @@ class adminProductModel
                 ':variant_id' => $variant_id
             ]);
             return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllOrderById($id)
+    {
+        try {
+            $sql = "SELECT * FROM order_details 
+            WHERE product_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllCommentById($id)
+    {
+        try {
+            $sql = "SELECT * FROM comments 
+            WHERE product_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllReviewById($id)
+    {
+        try {
+            $sql = "SELECT * FROM reviews 
+            WHERE product_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return $stmt->fetchAll();
         } catch (Exception $e) {
             echo $e->getMessage();
         }

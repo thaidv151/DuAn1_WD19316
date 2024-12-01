@@ -7,7 +7,7 @@ class adminOrderModel{
     }
     public function getAllOrderByStatusId($status_id){
         try {
-            $sql = "SELECT * ,status, payment_method_name FROM orders 
+            $sql = "SELECT orders.* ,status, payment_method_name FROM orders 
             INNER JOIN order_status on order_status.id = orders.order_status_id
             INNER JOIN payment_methods on payment_methods.id = orders.payment_method_id
             WHERE order_status_id = :status_id";
@@ -22,7 +22,7 @@ class adminOrderModel{
     }
     public function getAllOrderByStatusIdBetween($from, $to){
         try {
-            $sql = "SELECT * ,status, payment_method_name FROM orders 
+            $sql = "SELECT orders.* ,status, payment_method_name FROM orders 
             INNER JOIN order_status on order_status.id = orders.order_status_id
             INNER JOIN payment_methods on payment_methods.id = orders.payment_method_id
             WHERE order_status_id BETWEEN :from AND :to";
@@ -38,13 +38,13 @@ class adminOrderModel{
     }
     public function getOrderById($id){
         try {
-            $sql = "SELECT * ,status, payment_method_name FROM orders 
+            $sql = "SELECT orders.* ,status, payment_method_name FROM orders 
             INNER JOIN order_status on order_status.id = orders.order_status_id
             INNER JOIN payment_methods on payment_methods.id = orders.payment_method_id
            
-            WHERE orders.id = 1";
+            WHERE orders.id = :id";
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
+            $stmt->execute(['id' => $id]);
             return $stmt->fetch();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -80,7 +80,7 @@ class adminOrderModel{
             $sql = "SELECT product_name, product_description, color, thumbnail_variant, product_quantity, size, unit_cost, product_quantity * unit_cost as total_cost FROM order_details
             INNER JOIN products on products.id = order_details.product_id
             INNER JOIN variants on variants.id = order_details.variant_id
-            WHERE order_id = :order_id";
+            WHERE order_details.order_id = :order_id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ':order_id' => $order_id,

@@ -9,7 +9,25 @@ class HomeController
     }
     public function home()
     {
-        $listProduct = $this->modelHome->getAllProduct();
+        $listProductDefault = $this->modelHome->getAllProduct();
+        $listProduct = [];
+        if (isset($_POST['inpSearch']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            // $listProduct = [];
+            foreach ($listProductDefault as $key => $item) {
+                
+             
+                if(
+                    strpos(trim(strtolower($item['product_name'])), trim(strtolower($_POST['inpSearch']))) !== false 
+                ){
+                    $listProduct[] = $item;
+                   
+                }
+            }
+           
+        }else{
+            $listProduct = $listProductDefault;
+        }
+
 
 
         foreach ($listProduct as $key => $product) {
@@ -26,6 +44,7 @@ class HomeController
         }
         $listBanner = $this->modelHome->getAllBanner();
         require './views/products/homeView.php';
+        delteSessionError();
     }
 
     public function productDetail()
@@ -119,7 +138,7 @@ class HomeController
             $ratingPercentage5 = $countStar5 / count($listReviews) * 100;
 
             $avgRatingStar = round($totalRating / count($listReviews) * 100) / 100; // lấy ra hai dấu phẩy 
-        }else{
+        } else {
             $ratingPercentage1 = 0;
             $ratingPercentage2 = 0;
             $ratingPercentage3 = 0;
@@ -142,7 +161,7 @@ class HomeController
             debug($_POST);
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buyNow'])) {
-            debug(2);
+            header('location:' . BASE_URL . '?act=payment-vnpay');
         }
     }
     public function postComment()
@@ -175,6 +194,27 @@ class HomeController
                 header('location:' . $_SERVER['HTTP_REFERER']);
                 exit();
             }
+        }
+    }
+
+    public function changeStatusCommentById()
+    {
+        $comment_id = $_GET['id'];
+        $success = $this->modelHome->changeStatusComment($comment_id);
+        if ($success) {
+            $_SESSION['success'] = 'Cập nhật bình luận thành công';
+            header('location:' . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
+    }
+    public function deleteComment()
+    {
+        $comment_id = $_GET['id'];
+        $success = $this->modelHome->deleteCommentById($comment_id);
+        if ($success) {
+            $_SESSION['success'] = 'Xoá thành công bình luận thành công';
+            header('location:' . $_SERVER['HTTP_REFERER']);
+            exit();
         }
     }
 }

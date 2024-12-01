@@ -1,25 +1,31 @@
 <?php require_once './views/layouts/header.php'; ?>
 <!-- page-title -->
-
+<?php
+if (isset($_SESSION['success'])) { ?>
+    <script>
+        const alertSuccess = <?= json_encode($_SESSION['success']) ?>;
+        alert(alertSuccess);
+    </script>
+<?php } ?>
 <!-- /page-title -->
 <div class="tf-slideshow slider-effect-fade position-relative">
     <div dir="ltr" class="swiper tf-sw-slideshow " data-preview="1" data-tablet="1" data-mobile="1" data-centered="false" data-space="0" data-loop="true" data-auto-play="true" data-delay="3000" data-speed="1000">
         <div class="swiper-wrapper">
             <?php foreach ($listBanner as $key => $item): ?>
-             
-            <div class="swiper-slide">
-                <div class="wrap-slider">
-                    <img src="<?= $item['image_link'] ?>" alt="fashion-slideshow">
-                    <div class="box-content">
-                        <div class="container">
-                            <h1 class="fade-item fs-1 fade-item-1 col-4"><?= $item['title'] ?></h1>
-                            <p class="fade-item fade-item-2"><?= $item['content'] ?></p>
-                            <a href="<?= $item['product_link'] ?>" class="fade-item fade-item-3 tf-btn btn-fill animate-hover-btn btn-xl radius-3"><span>Shop collection</span><i class="icon icon-arrow-right"></i></a>
+
+                <div class="swiper-slide">
+                    <div class="wrap-slider">
+                        <img src="<?= $item['image_link'] ?>" alt="fashion-slideshow">
+                        <div class="box-content">
+                            <div class="container">
+                                <h1 class="fade-item fs-1 fade-item-1 col-4"><?= $item['title'] ?></h1>
+                                <p class="fade-item fade-item-2"><?= $item['content'] ?></p>
+                                <a href="<?= $item['product_link'] ?>" class="fade-item fade-item-3 tf-btn btn-fill animate-hover-btn btn-xl radius-3"><span>Shop collection</span><i class="icon icon-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-         <?php endforeach ?>
+            <?php endforeach ?>
         </div>
     </div>
     <div class="wrap-pagination">
@@ -64,17 +70,17 @@
                 <!-- card product 2 -->
                 <?php foreach ($listProduct as $key => $product): ?>
 
-                    <div  class="card-product" data-price="18.95" data-size="m l xl" data-color="brown light-purple light-green">
+                    <div class="card-product card-product-style" data-price="18.95" data-size="m l xl" data-color="brown light-purple light-green">
                         <div class="card-product-wrapper">
-                            <a href="<?= BASE_URL . '?act=product-detail&id=' . $product['id'] .'&variant_id=' . $product['album_product'][0]['id'] ?>" class="product-img">
+                            <a href="<?= BASE_URL . '?act=product-detail&id=' . $product['id'] . '&variant_id=' . $product['album_product'][0]['id'] ?>" class="product-img">
                                 <?php foreach ($product['album_product'] as $key => $item): ?>
 
 
-                                    <img class="lazyload" data-src="<?= $item['thumbnail_variant'] ?>" src="<?= $item['thumbnail_variant'] ?>" alt="image-product">
+                                    <img class="lazyload" data-src="<?= $item['thumbnail_variant'] ?>" src="<?= $item['thumbnail_variant'] ?>" alt="image-product" onerror="this.onerror=null;this.src='./uploads/logo1.png'">
 
                                 <?php endforeach ?>
                             </a>
-                          
+
                             <div class="size-list">
                                 <span>S</span>
                                 <span>M</span>
@@ -89,11 +95,11 @@
                         </div>
 
                         <div class="card-product-info">
-                            <a href="product-detail.html" class="title link fs-5"><?= $product['product_name'] ?></a>
+                            <div class="title link fs-5 product_name"><?= $product['product_name'] ?></div>
                             <div class="col-12  row">
 
-                                <del class=" ms-2 price col-7"><?= number_format($product['price']) ?></del>
-                                <span class="text-danger col-4 price"><?= number_format($product['promotion_price']) ?></span>
+                                <del class=" ms-2 price col-7"><?= number_format($product['price']). ' VND' ?></del>
+                                <span class="text-danger col-4 price"><?= number_format($product['promotion_price']) . ' VND' ?></span>
                             </div>
 
 
@@ -166,16 +172,12 @@
 
                     </div>
                 </div>
-                               
-               
+
+
             </form>
         </div>
 
     </div>
 </div>
-<script>
-    const cardProduct = document.querySelectorAll('.card-product');
-    
-  
-</script>
+
 <?php require_once './views/layouts/footer.php'; ?>

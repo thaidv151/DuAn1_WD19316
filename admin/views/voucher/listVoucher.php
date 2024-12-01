@@ -35,7 +35,7 @@ require_once './views/layouts/sidebar.php';
                                 <th>Giá trị giảm (%)</th>
                                 <th>Giới hạn giảm</th>
                                 <th>Điều kiền</th>
-                                <th>Số lượng còn</th>
+                                <th>Số lượng giới hạn</th>
                                 <th>Trạng thái</th>
                                 <th>Hành động</th>
                             </tr>
@@ -73,9 +73,17 @@ require_once './views/layouts/sidebar.php';
                                         <?= number_format($voucher['quantity_limit']) ?>
                                     </td>
                                     <td>
-                                        <p class="pe-3 ps-3 badge <?= $voucher['status'] === 1 ? 'bg-success' : 'bg-warning' ?>">
+                                        <?php
+                                        $countVoucher = $voucher['quantity_limit'] - $voucher['used_count'];
+                                        if($countVoucher == 0){ ?>
+                                        <p class="pe-3 ps-3 badge bg-danger">
+                                            Hết lượt
+                                        </p>
+                                        <?php } else{ ?> 
+                                            <p class="pe-3 ps-3 badge <?= $voucher['status'] === 1 ? 'bg-success' : 'bg-warning' ?>">
                                             <?= $voucher['status'] === 1 ? 'Hiện' : 'Ẩn' ?>
                                         </p>
+                                        <?php } ?>
                                     </td>
                                     <td>
 

@@ -10,7 +10,9 @@ class modelHome
     public function getAllProduct()
     {
         try {
-            $sql = "SELECT * FROM products ORDER BY view desc";
+            $sql = "SELECT * FROM products 
+            WHERE status = 1
+            ORDER BY view desc ";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -127,7 +129,7 @@ class modelHome
     public function getAllCommentByProductId($id)
     {
         try {
-            $sql = "SELECT comments.id as id, comments.created_at, content, username, avatar, users.id as user_id FROM comments 
+            $sql = "SELECT comments.status,  comments.id as id, comments.created_at, content, username, avatar, users.id as user_id FROM comments 
             INNER JOIN users on users.id = comments.user_id 
             WHERE  comments.product_id = :id
             ";
@@ -187,6 +189,36 @@ class modelHome
                 ['id' => $id]
             );
             return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function changeStatusComment($id){
+        try {
+            $sql = "UPDATE comments 
+            SET status = CASE
+            WHEN status = 1 THEN 0 
+            ELSE 1 
+            END
+            WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function deleteCommentById($id){
+        try {
+            $sql = "DELETE FROM comments
+            WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return true;
         } catch (Exception $e) {
             echo $e->getMessage();
         }

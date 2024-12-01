@@ -1,12 +1,19 @@
 <?php
 
 class adminController {
-    public $model;
+    public $modelHomeAdmin;
     public function __construct()
     {
-        $this->model = new adminModel;
+        $this->modelHomeAdmin = new adminModel;
     }
     public function homeAdmin(){
+        $orderInDay = $this->modelHomeAdmin->getOrderByDayNow();
+        debug($orderInDay);
+        $orderInWeek = $this->modelHomeAdmin->getOrderByWeekNow();
+        $orderInMonth = $this->modelHomeAdmin->getOrderByMonthNow();
+
+      
         require './views/homeAdmin.php';
     }
+    
 }
