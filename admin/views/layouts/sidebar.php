@@ -3,13 +3,37 @@
         <nav class="navbar navbar-expand">
             <div class="collapse navbar-collapse justify-content-between">
                 <div class="header-left">
-                    <div class="dashboard_bar">
-                        Dashboard
-                    </div>
+
                 </div>
                 <ul class="navbar-nav header-right">
 
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell-fill text-danger"></i>
+                            <span class="badge badge-primary rounded-circle"><?= count($_SESSION['order_cancel']) ?></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div id="dlab_W_Notification1" class="widget-media dlab-scroll p-3  height380">
+                                <div>
+                                    <p class="bg-danger p-2 text-white">Đơn hàng huỷ (đã thanh toán) </p>
+                                </div>
+                                <ul class="timeline">
+                                    <?php if (isset($_SESSION['order_cancel'])) { ?>
+                                        <?php foreach ($_SESSION['order_cancel'] as $key => $item): ?>
+                                            <li>
+                                              
+                                                <a style="text-decoration: none;" href="<?= BASE_URL_ADMIN . '?act=detail-order&order_id=' . $item['id'] ?>" class="card p-1">
+                                                    <h6 class="mb-1"><?= $item['order_code'] ?></h6>
+                                                    <small class="d-block"><?= $item['update_at'] ?></small>
+                                                </a>
+                                            </li>
+                                        <?php endforeach ?>
+                                    <?php } ?>
+                                </ul>
+                            </div>
 
+                        </div>
+                    </li>
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
                             <img src="<?= '.' . $_SESSION['user']['avatar'] ?>" width="20" alt="" ;
@@ -59,12 +83,15 @@
 <div class="dlabnav">
     <div class="dlabnav-scroll">
         <ul class="metismenu" id="menu">
-            <li><a href="<?= BASE_URL_ADMIN ?>" href="javascript:void(0);" aria-expanded="false">
-                    <i class="flaticon-381-networking"></i>
-                    <span class="nav-text">Trang chủ</span>
-                </a>
 
-            </li>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_id'] === 0) { ?>
+                <li><a href="<?= BASE_URL_ADMIN ?>" href="javascript:void(0);" aria-expanded="false">
+                        <i class="flaticon-381-networking"></i>
+                        <span class="nav-text">Trang chủ</span>
+                    </a>
+
+                </li>
+            <?php } ?>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="flaticon-381-television"></i>
                     <span class="nav-text">Sản phẩm</span>
@@ -93,15 +120,17 @@
                     <li><a href="<?= BASE_URL_ADMIN . '?act=add-banner' ?>">Thêm Banner</a></li>
                 </ul>
             </li>
-            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
-                    <i class="bi bi-people"></i>
-                    <span class="nav-text">Người dùng</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-admin' ?>">Tài khoản quản trị</a></li>
-                    <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-client' ?>">Tài khoản người dùng</a></li>
-                </ul>
-            </li>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_id'] === 0) { ?>
+                <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-text">Người dùng</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-admin' ?>">Tài khoản quản trị</a></li>
+                        <li><a href="<?= BASE_URL_ADMIN . '?act=list-user-client' ?>">Tài khoản người dùng</a></li>
+                    </ul>
+                </li>
+            <?php } ?>
             <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
                     <i class="bi bi-cart4"></i>
                     <span class="nav-text">Đơn hàng</span>
@@ -126,7 +155,9 @@
                     <li><a href="<?= BASE_URL_ADMIN . '?act=form-add-voucher' ?>">Thêm voucher</a></li>
                 </ul>
             </li>
-            
+
+
+
         </ul>
     </div>
 </div>

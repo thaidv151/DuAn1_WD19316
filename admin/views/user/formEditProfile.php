@@ -20,7 +20,7 @@ require_once './views/layouts/sidebar.php';
                     <div class="p-5">
                         <div class="author-profile">
                             <div class="author-media">
-                                <img width="130px" src="<?= '.' . $_SESSION['user']['avatar'] ?>" alt=""
+                                <img width="130px" height="130px" src="<?= '.' . $_SESSION['user']['avatar'] ?>" alt=""
                                     onerror="this.onerror=null; this.src= '../uploads/user.png'" ;>
 
                             </div>

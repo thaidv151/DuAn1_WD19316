@@ -38,7 +38,11 @@ require_once './views/layouts/sidebar.php';
                     <tbody>
                         <?php foreach ($listUserAdmin as $key => $user): ?>
                             <tr>
-                                <td><?= $user['username'] ?></td>
+                                <td>
+                                    <a style="text-decoration: none; color:black;" href="<?= BASE_URL . '?act=client-profile&user_id=' . $user['id'] ?>">
+                                        <?= $user['username'] ?>
+                                    </a>
+                                </td>
                                 <td><?= $user['email'] ?></td>
                                 <td><?= $user['phone'] ?></td>
                                 <td><?= $user['role_id'] === 2 ? 'Client' : 'Admin' ?></td>
@@ -48,19 +52,19 @@ require_once './views/layouts/sidebar.php';
                                     </p>
                                 </td>
                                 <td>
-                              
-                                        <a style="text-decoration: none;" onclick="return confirm('Bạn có muốn thay đổi trạng thái của người này ?')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=change-status-user&from=list-user-client&user_id=' . $user['id'] ?>">
-                                            <button class="btn border" title="Ẩn/hiển">
-                                                <?php echo $user['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
-                                            </button>
-                                        </a>
 
-                                        <a href="<?= BASE_URL_ADMIN . '?act=change-role&user_id=' . $user['id'] ?>">
-                                            <button onclick="return confirm('Bạn có chắc thay đổi chức vụ của người này chứ')" class="btn btn-warning">
-                                                <i class="bi bi-arrow-counterclockwise"></i>
-                                            </button>
-                                        </a>
-                                  
+                                    <a style="text-decoration: none;" onclick="return confirm('Bạn có muốn thay đổi trạng thái của người này ?')" class="text-dark" href="<?= BASE_URL_ADMIN . '?act=change-status-user&from=list-user-client&user_id=' . $user['id'] ?>">
+                                        <button class="btn border" title="Ẩn/hiển">
+                                            <?php echo $user['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
+                                        </button>
+                                    </a>
+
+                                    <a href="<?= BASE_URL_ADMIN . '?act=change-role&user_id=' . $user['id'] ?>">
+                                        <button onclick="return confirm('Bạn có chắc thay đổi chức vụ của người này chứ')" class="btn btn-warning">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                        </button>
+                                    </a>
+
                                 </td>
                             </tr>
                         <?php endforeach ?>

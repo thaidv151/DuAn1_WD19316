@@ -10,7 +10,14 @@
     <?php
     
      if(isset($_SESSION['error'])) {?>
-        <p class="text-danger f-1"> <?= $_SESSION['error'] ?></p>
+        <p class="text-danger f-1"> 
+            <?php 
+        if($_SESSION['error']){
+            echo $_SESSION['error'];
+        }else{
+            echo '';
+        }
+        ?></p>
     <?php } ?>
         <div class="tf-page-cart-wrap">
             <div class="tf-page-cart-item">
@@ -108,7 +115,7 @@
 
                             <div class="cart-checkout-btn">
                                 <button class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center" id="buutonSubmit">
-                                    Đặt hàng
+                                  Thanh toán
                                 </button>
                             </div>
 

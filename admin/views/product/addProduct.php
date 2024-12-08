@@ -46,14 +46,14 @@ require_once './views/layouts/sidebar.php';
                     <p class="text-danger"> <?= $_SESSION['error']['thumbnail'] ?> </p>
                 <?php } ?>
             </div>
-            <div class="form-group col-6">
+            <div class="form-group col-12">
                 <label>Album hình ảnh sản phẩm ( chỉ nhận file .png, .jpg, .webp, .gif )</label>
                 <?php if (isset($_SESSION['error']['albums'])) { ?>
                     <p class="text-danger"> <?= $_SESSION['error']['albums'] ?> </p>
                 <?php } ?>
                 <input class="form-control" type="file" placeholder="Hình ảnh đại diện" name="albums[0][]" multiple>
             </div>
-            <div class="form-group col-6">
+            <div class="form-group col-12">
                 <label>Màu sắc</label>
                 <input class="form-control" type="text" placeholder="Màu sắc" name="color[0]">
                 <?php if (isset($_SESSION['error']['color'])) { ?>

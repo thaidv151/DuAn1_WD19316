@@ -41,17 +41,35 @@ class cartController
                 header('location:' .  BASE_URL . '?act=login');
                 exit();
             }
-           
+
             $product_id = $_POST['product_id'];
             $variant_id = $_POST['variant_id'];
             $size_id = $_POST['size_id'];
             $quantity = $_POST['quantity'];
             $user_id = $_SESSION['user']['id'];
             $errors = [];
+            $listCardByUserId = $this->modelCart->getAllCartByUserId($_SESSION['user']['id']);
+
+            if (!empty($listCardByUserId)) {
+            }
+            foreach ($listCardByUserId as $key => $item) {
+
+
+                if ($item['size_id'] == $size_id && $item['variant_id'] == $variant_id && $item['product_id'] == $product_id) {
+                    $this->modelCart->updateQuantityCart($item['id'], $item['quantity']);
+                    if (isset($_POST['redirect'])) {
+                        header('location:' . BASE_URL . '?act=view-cart');
+                        exit();
+                    }
+                    header('location:' . $_SERVER['HTTP_REFERER']);
+                    exit();
+                }
+            }
+
             $quantitySizeInstock = $this->modelCart->getSizeInstock($variant_id, $size_id);
 
 
-            if($quantitySizeInstock['quantity_size'] < $quantity){
+            if ($quantitySizeInstock['quantity_size'] < $quantity) {
                 $errors['quantity'] = 'Số lượng sản phẩm khônng đủ để thêm vào giỏ hàng';
             }
             if (!isset($size_id)) {

@@ -109,6 +109,8 @@ if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) {
 
         'list-voucher' => (new adminVoucherController())->listVoucher(),
 
+        'delete-voucher' => (new adminVoucherController())->deleteVoucher(),
+
         'change-status-voucher' => (new adminVoucherController())->changeStatusVoucher(),
 
         'form-edit-voucher' => (new adminVoucherController())->formEditVoucher(),

@@ -3,9 +3,11 @@
 class userController
 {
     public $modelUser;
+    public $modelOrder;
     public function __construct()
     {
         $this->modelUser = new modelUser;
+        $this->modelOrder = new modelOrder;
     }
     function login()
     {
@@ -111,6 +113,12 @@ class userController
                 $errors['password'] = 'Không để trống password';
             }
             $user = $this->modelUser->getUserByEmail($email);
+            if($user['status'] !== 1){
+                $_SESSION['success']= 'Tài khoản của bạn đã bị cấm vui lòng liện hệ admin để xử lý!!';
+                header('location:' . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
+            
             if (!empty($user)) {
                 if (password_verify($password, $user['password'])) {
                     $success = true;
@@ -247,5 +255,12 @@ class userController
                 exit();
             }
         }
+    }
+    public function clientProfile(){
+        $user_id = $_GET['user_id'];
+        $listOrder = $this->modelOrder->getAllOrderByUserId($user_id);
+        $user = $this->modelUser->getUserById($user_id);
+        
+        require './views/user/profileUserView.php';
     }
 }

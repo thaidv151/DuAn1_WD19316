@@ -73,6 +73,7 @@ class adminVoucherController
     {
         $listVoucher = $this->modelVoucher->getAllVoucher();
         require_once './views/voucher/listVoucher.php';
+        delteSessionError();
     }
     public function changeStatusVoucher()
     {
@@ -92,13 +93,15 @@ class adminVoucherController
             exit();
         }
     }
-    public function formEditVoucher(){
+    public function formEditVoucher()
+    {
         $voucher_id = $_GET['voucher_id'];
         $voucher = $this->modelVoucher->getVoucherById($voucher_id);
         require_once './views/voucher/formEditVoucher.php';
         delteSessionError();
     }
-    public function postEditVoucher(){
+    public function postEditVoucher()
+    {
         $voucher_id = $_POST['voucher_id'];
         $title_voucher = $_POST['title_voucher'] ?? '';
         $description = $_POST['description'] ?? '';
@@ -108,6 +111,13 @@ class adminVoucherController
         $quantity_limit = $_POST['quantity_limit'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $used_count = 0;
+        $orderByVoucherId = $this->modelVoucher->getAllOrderByVoucherId($voucher_id);
+      
+        if (!empty($orderByVoucherId)) {
+            $_SESSION['success'] = 'Voucher đã được sử dụng không thể sửa';
+            header('location:' . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
         $errors = [];
         if (empty($title_voucher)) {
             $errors['title_voucher'] = 'Tiêu đề không để trống';
@@ -138,12 +148,12 @@ class adminVoucherController
         if (empty($end_date)) {
             $errors['end_date'] = 'Màu sắc không để trống';
         }
-      
+
         if (empty($errors)) {
 
 
             $success = $this->modelVoucher->updateVoucher($voucher_id, $title_voucher, $description, $used_count, $end_date, $disscount_value, $max_disscount_amount, $min_order_amount, $quantity_limit);
-          
+
             $_SESSION['success'] = 'Sửa mã khuyến mãi thành công';
             header('location:' . BASE_URL_ADMIN . '?act=form-edit-voucher&voucher_id=' . $voucher_id);
             exit();
@@ -151,10 +161,25 @@ class adminVoucherController
             $_SESSION['error'] = $errors;
             $_SESSION['flash'] = true;
             $_SESSION['success'] = 'Sửa mã khuyến mãi thất bại';
-            header('location:' . BASE_URL_ADMIN . '?act=form-edit-voucher&voucher_id=' . $voucher_id );
+            header('location:' . BASE_URL_ADMIN . '?act=form-edit-voucher&voucher_id=' . $voucher_id);
             exit();
         }
     }
-
+    public function deleteVoucher()
+    {
+        $voucher_id = $_GET['voucher_id'];
+        $orderByVoucherId = $this->modelVoucher->getAllOrderByVoucherId($voucher_id);
+       
+        if (!empty($orderByVoucherId)) {
+            $_SESSION['success'] = 'Voucher đã được sử dụng  không thể xoá';
+            header('location:' . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
+        $success = $this->modelVoucher->deleteVoucherById($voucher_id);
+        if ($success) {
+            $_SESSION['success'] = 'Xoá voucher thành công';
+            header('location:' . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
     }
-
+}

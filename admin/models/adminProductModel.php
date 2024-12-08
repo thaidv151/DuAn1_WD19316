@@ -390,6 +390,20 @@ class adminProductModel
             echo $e->getMessage();
         }
     }
+    public function getAllOrderByVariantId($id)
+    {
+        try {
+            $sql = "SELECT * FROM order_details 
+            WHERE variant_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
     public function getAllCommentById($id)
     {
         try {
@@ -409,6 +423,20 @@ class adminProductModel
         try {
             $sql = "SELECT * FROM reviews 
             WHERE product_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                ['id' => $id]
+            );
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllReviewByVariantId($id)
+    {
+        try {
+            $sql = "SELECT * FROM reviews 
+            WHERE variant_id = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute(
                 ['id' => $id]

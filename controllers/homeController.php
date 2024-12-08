@@ -3,46 +3,58 @@
 class HomeController
 {
     public $modelHome;
+    public $modelCart;
     public function __construct()
     {
         $this->modelHome = new modelHome;
+        $this->modelCart = new modelCart;
     }
     public function home()
     {
         $listProductDefault = $this->modelHome->getAllProduct();
-        $listProduct = [];
-        if (isset($_POST['inpSearch']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // $listProduct = [];
-            foreach ($listProductDefault as $key => $item) {
-                
-             
-                if(
-                    strpos(trim(strtolower($item['product_name'])), trim(strtolower($_POST['inpSearch']))) !== false 
-                ){
-                    $listProduct[] = $item;
-                   
-                }
-            }
-           
-        }else{
-            $listProduct = $listProductDefault;
+        $listProduct = $listProductDefault;
+        if(isset($_SESSION['user'])){
+            $listCartById = $this->modelCart->getAllCartByUserId($_SESSION['user']['id']);
+            $_SESSION['count_cart'] = count($listCartById);
         }
+   
+        $listProductViewDesc = $this->modelHome->getAllProductViewDesc();
+       
+        $listProductView = $listProductViewDesc;
+
+        foreach ($listProductViewDesc as $key => $product) {
+         
+            $variant = $this->modelHome->getAllVariantByProductId($product['id']);
+           
+            if ($variant[0]['price'] > 0 && $variant[0]['promotion_price'] > 0) {
+                $listProductView[$key]['disscount_value'] = round(100 - ($variant[0]['promotion_price'] / $variant[0]['price'] * 100));
+            } else {
+                $listProductView[$key]['disscount_value'] = 0;
+            }
+        
+            $listProductView[$key]['price'] = $variant[0]['price'];
+            $listProductView[$key]['promotion_price'] = $variant[0]['promotion_price'];
+            $listProductView[$key]['album_product'] = $variant;
+        }
+
 
 
 
         foreach ($listProduct as $key => $product) {
             $variant = $this->modelHome->getAllVariantByProductId($product['id']);
-            // debug($variant);
+            $listCategoryById = $this->modelHome->getAllCategoryByProductId($product['id']);
             if ($variant[0]['price'] > 0 && $variant[0]['promotion_price'] > 0) {
                 $listProduct[$key]['disscount_value'] = round(100 - ($variant[0]['promotion_price'] / $variant[0]['price'] * 100));
             } else {
                 $listProduct[$key]['disscount_value'] = 0;
             }
+            $listProduct[$key]['categories'] = $listCategoryById; 
             $listProduct[$key]['price'] = $variant[0]['price'];
             $listProduct[$key]['promotion_price'] = $variant[0]['promotion_price'];
             $listProduct[$key]['album_product'] = $variant;
         }
         $listBanner = $this->modelHome->getAllBanner();
+        $listCategories = $this->modelHome->getAllCategories();
         require './views/products/homeView.php';
         delteSessionError();
     }
@@ -59,11 +71,7 @@ class HomeController
         $listVariant = $this->modelHome->getAllVariantByProductId($product_id);
         $listSize = $this->modelHome->getAllSizeByVariantId($variant_id);
 
-        // foreach ($listVariant as $num => $item) {
-        //     foreach ($listSize as $key => $size) {
-        //         $listVariant[$num]['size'] = $listSize;
-        //      }
-        // }
+     
 
 
         $album_variant = $this->modelHome->getAllAlbumByVariantId($variant_id); // lấy rả album ảnh của biến thể
@@ -86,7 +94,6 @@ class HomeController
             $listSuggestedProducts[] =  $this->modelHome->getALlProductByCategoryId($item['category_id']);
         }
         $filterSuggestedProducts = [];
-        // debug($listSuggestedProducts);
 
         foreach ($listSuggestedProducts as $key => $itemProduct) { // lọc ra các sản phẩm có cùng danh  mục mà không bị lặp lại
             foreach ($itemProduct as $key => $item) {
@@ -155,15 +162,7 @@ class HomeController
         require './views/products/productDetail.php';
         delteSessionError();
     }
-    public function postAddCart()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
-            debug($_POST);
-        }
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buyNow'])) {
-            header('location:' . BASE_URL . '?act=payment-vnpay');
-        }
-    }
+ 
     public function postComment()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

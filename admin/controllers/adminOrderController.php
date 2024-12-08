@@ -53,7 +53,7 @@ class adminOrderController
             $order_id = $_GET['order_id'];
        
             $order_status_id = $_POST['order_status_id'];
-   
+            debug($order_status_id);
             $success = $this->modelOrder->changeStatusOrderById($order_id, $order_status_id);
             if ($success) {
                 $_SESSION['success'] = 'Thay đổi trạng thái đơn hàng thành công';
@@ -85,5 +85,6 @@ class adminOrderController
          $listReturnOrder = $this->modelOrder->getAllOrderByStatusId(8);
          require_once './views/order/listReturnOrder.php';
     }
+    
 
 }

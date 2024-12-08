@@ -10,12 +10,14 @@ require_once './controllers/homeController.php';
 require_once './controllers/userController.php';
 require_once './controllers/cartController.php';
 require_once './controllers/paymentController.php';
+require_once './controllers/orderController.php';
 
 // Require toàn bộ file Models
 require_once './models/homeModel.php';
 require_once './models/cartModel.php';
 require_once './models/userModel.php';
 require_once './models/paymentModel.php';
+require_once './models/orderModel.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -38,16 +40,16 @@ match ($act) {
 
     'edit-profile' => (new userController())->formEditProfile(),
 
+    'client-profile' => (new userController())->clientProfile(),
+
     'post-edit-profile' => (new userController())->postEditProfile(),
   
 
     'product-detail' => (new HomeController())->productDetail(),
 
-    'post-add-cart' => (new HomeController())->postAddCart(),
 
     'post-comments' => (new HomeController())->postComment(),
 
-    // 'payment-method' => (new PaymentController())->paymentVNPAY(),
     
     'thanks' => (new PaymentController())->returnByPayment(),
 
@@ -64,5 +66,15 @@ match ($act) {
     'change-status-comment' => (new HomeController())->changeStatusCommentById(),
 
     'delete-comment' => (new HomeController())->deleteComment(),
+
+    'list-order' => (new orderController())->listOrder(),
+
+    'view-order-detail' => (new orderController())->orderDetail(),
+
+    'cancel-order' => (new orderController())->cancelOrder(),
+
+    'complete-order' => (new orderController())->completeOrder(),
+
+    'post-add-review' => (new orderController())->postAddReview(),
 
 };
