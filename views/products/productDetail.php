@@ -78,10 +78,11 @@
                             <div class="variant-picker-item">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="variant-picker-label">
-                                        <?php if (isset($_SESSION['error']['size_id'])) { ?>
-                                            <p class="text-danger"><?= $_SESSION['error']['size_id'] ?></p>
-                                        <?php } ?>
+
                                         Size: <span class="fw-6 variant-picker-label-value">S</span>
+                                        <?php if (isset($_SESSION['error']['size_id'])) { ?>
+                                            <p class="text-danger fs-5"><?= $_SESSION['error']['size_id'] ?></p>
+                                        <?php } ?>
                                     </div>
 
                                 </div>
@@ -97,6 +98,7 @@
 
                                         </div>
                                     <?php endforeach ?>
+
                                 </div>
                             </div>
                         </div>
@@ -105,13 +107,13 @@
                                 <p>Instock: </p>
                                 <p class="quantitySize"></p>
                                 <?php if (isset($_SESSION['error']['quantity'])) { ?>
-                                            <p class="text-danger"><?= $_SESSION['error']['quantity'] ?></p>
-                                        <?php } ?>
+                                    <p class="text-danger"><?= $_SESSION['error']['quantity'] ?></p>
+                                <?php } ?>
                             </div>
                             <div class="quantity-title fw-6">Quantity: </div>
                             <div class="wg-quantity">
                                 <span class="btn-quantity btn-decrease" onclick="reloadIncrease()">-</span>
-                                <input type="text" class="quantity-product" name="quantity" value="1">
+                                <input type="number" class="quantity" name="quantity" value="1" min="0" onchange="">
                                 <span class="btn-quantity btn-increase" onclick="checkLimitSize()">+</span>
                             </div>
                         </div>
@@ -158,7 +160,10 @@
                                                         <div class="reply-comment-item">
                                                             <div class="user position-relative">
                                                                 <div>
-                                                                    <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                                    <a href="<?= BASE_URL . '?act=client-profile&user_id=' . $item['user_id'] ?>">
+                                                                        <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt="" onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+
+                                                                    </a>
                                                                 </div>
                                                                 <div>
                                                                     <h6>
@@ -169,13 +174,26 @@
                                                                 <?php if (isset($_SESSION['user'])) { ?>
                                                                     <?php if ($_SESSION['user']['id'] === 1 || $_SESSION['user']['id'] === 0) { ?>
                                                                         <div class="d-flex position end-0 position-absolute">
+
                                                                             <a title="Ẩn/hiện" href="<?= BASE_URL . '?act=change-status-comment&id=' . $item['id'] ?>">
                                                                                 <button class="btn border <?= $item['status'] ? 'btn-success' : 'btn-danger' ?>">
                                                                                     <?= $item['status'] === 1 ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>' ?>
-
                                                                                 </button>
                                                                             </a>
+
                                                                         </div>
+
+                                                                        <?php if ($_SESSION['user']['id'] === $item['user_id']) {  ?>
+                                                                            <div class="d-flex position end-0 me-5 position-absolute">
+                                                                                <a title="Xoá binh luận" href="<?= BASE_URL . '?act=delete-comment&id=' . $item['id'] ?>">
+                                                                                    <button class="btn border btn-danger">
+                                                                                        <i class="bi bi-trash3"></i>
+                                                                                    </button>
+                                                                                </a>
+                                                                            </div>
+                                                                        <?php } ?>
+
+
                                                                     <?php } ?>
                                                                 <?php } ?>
 
@@ -197,11 +215,11 @@
                                                                         <div class="day text_black-3"><?= $item['created_at'] ?></div>
                                                                     </div>
                                                                     <?php if (isset($_SESSION['user'])) { ?>
-                                                                        <?php if ($_SESSION['user']['role_id'] === 2 && $_SESSION['user']['id'] === $item['user_id']){  ?>
+                                                                        <?php if ($_SESSION['user']['role_id'] === 2 && $_SESSION['user']['id'] === $item['user_id']) {  ?>
                                                                             <div class="d-flex position end-0 position-absolute">
                                                                                 <a title="Xoá binh luận" href="<?= BASE_URL . '?act=delete-comment&id=' . $item['id'] ?>">
                                                                                     <button class="btn border btn-danger">
-                                                                                    <i class="bi bi-trash3"></i>
+                                                                                        <i class="bi bi-trash3"></i>
                                                                                     </button>
                                                                                 </a>
                                                                             </div>
@@ -227,7 +245,7 @@
                                                                     </h6>
                                                                     <div class="day text_black-3"><?= $item['created_at'] ?></div>
                                                                 </div>
-                                                            
+
 
                                                             </div>
                                                             <p class="text_black-3 form-control"><?= $item['content'] ?></p>
@@ -338,10 +356,28 @@
 
                                             <div class="reply-comment-item">
                                                 <div class="user">
-                                                    <div class="image">
-                                                        <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt=""
-                                                            onerror="this.onerror=null; this.src='./uploads/logo1.png'">
-                                                    </div>
+
+                                                    <?php if (isset($_SESSION['user'])) { ?>
+                                                        <?php if ($_SESSION['user']['role_id'] === 1 || $_SESSION['user']['role_id'] === 0) { ?>
+                                                            <a href="<?= BASE_URL . '?act=client-profile&user_id=' . $item['user_id'] ?>">
+                                                                <div class="image">
+                                                                    <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt=""
+                                                                        onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                                </div>
+                                                            </a>
+
+                                                        <?php } else { ?>
+                                                            <div class="image">
+                                                                <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt=""
+                                                                    onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                            </div>
+                                                        <?php } ?>
+                                                    <?php } else {  ?>
+                                                        <div class="image">
+                                                            <img style="width:40px; height:40px; border-radius:50%;" src="<?= $item['avatar'] ?>" alt=""
+                                                                onerror="this.onerror=null; this.src='./uploads/logo1.png'">
+                                                        </div>
+                                                    <?php } ?>
                                                     <div class="col-8 row">
                                                         <div class="col-2">
                                                             <h6>
@@ -444,11 +480,28 @@
     }
 
     const variant = <?= json_encode($listSize) ?>;
+
     const quantitySize = document.querySelector('.quantitySize');
-    const quantity = document.querySelector('.quantity-product');
+
+    const quantity = document.querySelector('.quantity');
+
     const btnIncrease = document.querySelector('.btn-increase');
     const btnDecrease = document.querySelector('.btn-decrease');
 
+    btnIncrease.addEventListener('click', () => {
+        let count = quantity.value
+        count = Number(count) + Number(1);
+        quantity.value = count;
+    })
+    btnDecrease.addEventListener('click', () => {
+        if (!quantity.value > 1) {
+            let count = quantity.value
+            count = Number(count) - Number(1);
+            quantity.value = count;
+        } else {
+            quantity.value = 1;
+        }
+    })
     let sizeSelect = null;
 
     const checkQuantity = (value) => {

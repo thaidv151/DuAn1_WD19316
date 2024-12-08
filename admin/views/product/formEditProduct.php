@@ -171,7 +171,7 @@ require_once './views/layouts/sidebar.php';
                             </div>
 
                             <div class="col-12 row">
-                                <?php foreach ($variant['list_size'] as $key => $size): ?>
+                                <?php foreach ( $variant['list_size']  as $key => $size): ?>
                                     <label class="col-3">Kích thước <?= $size['name_size'] ?> :
                                         <input min="0" max="10000" value="<?= number_format($size['quantity_size']) ?>" class="form-control" type="text" name="quantitys[]" placeholder="Số lượng"></label>
                                     <input type="hidden" name="size_id[]" value="<?= $size['size_id'] ?>">

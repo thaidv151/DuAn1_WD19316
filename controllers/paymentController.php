@@ -13,88 +13,76 @@ class paymentController
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($_POST['payment_method_id'] == 1) {
-                $order_code = 'DH' . rand(100000000, 100000000000000000);
-                $user_id = $_SESSION['user']['id'];
-                $shipping_address = $_POST['address'] . ', ' . $_POST['ward'] . ', ' . $_POST['district'] . ', ' . $_POST['city'];
+            $order_code = 'DH' . rand(100000000, 100000000000000000);
+            $user_id = $_SESSION['user']['id'];
+            $shipping_address = $_POST['address'] . ', ' . $_POST['ward'] . ', ' . $_POST['district'] . ', ' . $_POST['city'];
 
-                $customer_email = $_POST['customer_email'];
-                $customer_phone = $_POST['customer_phone'];
-                $customer_name = $_POST['customer_name'];
-                $payment_method_id = $_POST['payment_method_id'];
-                $voucher_id = $_POST['voucher_id'] ?? '';
-                $shipping = $_SESSION['data_order']['shipping'];
-
+            $customer_email = $_POST['customer_email'];
+            $customer_phone = $_POST['customer_phone'];
+            $customer_name = $_POST['customer_name'];
+            $payment_method_id = $_POST['payment_method_id'];
+            $voucher_id = $_POST['voucher_id'] ?? '';
+            $shipping = $_SESSION['data_order']['shipping'];
 
 
-
-
-
-
-
-                if ($voucher_id === '') {
-                    $voucher_id = null;
-                }
-                $errors = [];
-                if (empty($_POST['address'])) {
-                    $errors['address'] = 'Không để trống địa chỉ';
-                }
-                if (empty($_POST['ward'])) {
-                    $errors['ward'] = 'Không để trống phường xã';
-                }
-                if (empty($_POST['district'])) {
-                    $errors['district'] = 'Không để trống quận huyện';
-                }
-                if (empty($_POST['city'])) {
-                    $errors['city'] = 'Không để trống thành phố';
-                }
-                $regexEmail = '/^\\S+@\\S+\\.\\S+$/';
-                $regexPhone = "/(84|0[3|5|7|8|9])+([0-9]{8})\b/";
-                if (empty($customer_email)) {
-                    $errors['customer_email'] = 'Không để trống email';
-                } else if (!preg_match($regexEmail, $customer_email)) {
-                    $errors['customer_email'] = 'Email không hợp lệ';
-                }
-                if (empty($customer_phone)) {
-                    $errors['customer_phone'] = 'Không để trống số điện thoại';
-                } else if (!preg_match($regexPhone, $customer_phone)) {
-                    $errors['customer_phone'] = 'Số điẹn thoại không hợp lệ';
-                }
-
-                if (empty($errors)) {
-
-
-                    $listProductAddOrder = $_SESSION['data_order']['list_cart_order'];
-                    $newOrderId = $this->modelPayment->inserNewOrder($order_code, $user_id, $customer_name, $shipping_address, $customer_email, $customer_phone, $payment_method_id, $voucher_id, $shipping);
-                    // debug($listProductAddOrder);  
-                    if (!empty($voucher_id)) {
-                        $this->modelPayment->changeQuantityVoucher($voucher_id);
-                    }
-                    foreach ($listProductAddOrder as $key => $item) {
-                        $this->modelPayment->insertOrderDetail($item['product_id'], $newOrderId, $item['variant_id'], $item['quantity'], $item['size'], $item['promotion_price']);
-                        $this->modelCart->deleteCartId($item['id']);
-                        $this->modelPayment->changeQuantityById($item['variant_id'], $item['size_id'], $item['quantity']);
-                    }
-
+            if ($voucher_id === '') {
+                $voucher_id = null;
+            }
+            $errors = [];
+            if (empty($_POST['address'])) {
+                $errors['address'] = 'Không để trống địa chỉ';
+            }
+            if (empty($_POST['ward'])) {
+                $errors['ward'] = 'Không để trống phường xã';
+            }
+            if (empty($_POST['district'])) {
+                $errors['district'] = 'Không để trống quận huyện';
+            }
+            if (empty($_POST['city'])) {
+                $errors['city'] = 'Không để trống thành phố';
+            }
+            $regexEmail = '/^\\S+@\\S+\\.\\S+$/';
+            $regexPhone = "/(84|0[3|5|7|8|9])+([0-9]{8})\b/";
+            if (empty($customer_email)) {
+                $errors['customer_email'] = 'Không để trống email';
+            } else if (!preg_match($regexEmail, $customer_email)) {
+                $errors['customer_email'] = 'Email không hợp lệ';
+            }
+            if (empty($customer_phone)) {
+                $errors['customer_phone'] = 'Không để trống số điện thoại';
+            } else if (!preg_match($regexPhone, $customer_phone)) {
+                $errors['customer_phone'] = 'Số điẹn thoại không hợp lệ';
+            }
             
-                    $listCartById = $this->modelCart->getAllCartByUserId($_SESSION['user']['id']); // reload lại só lượng sản phẩm trong giỏ hàng của user
-                    $_SESSION['count_cart'] = count($listCartById);
-                    $_SESSION['success'] = 'Đặt hàng thành công';
-                    unset($_SESSION['data_order']);
-                    header('location:' . BASE_URL);
-                    exit();
-                } else {
-                    $_SESSION['error'] = $errors;
-                    $_SESSION['flash'] = true;
-                    header('location:' . BASE_URL . '?act=form-check-out');
-                    exit();
+
+            if (!empty($errors)) {
+
+                $_SESSION['error'] = 'Thiếu thông tin thanh toán';
+                $_SESSION['flash'] = true;
+                header('location:' . BASE_URL . '?act=view-cart');
+                exit();
+            }
+            
+            if ($_POST['payment_method_id'] == 1) {
+                $listProductAddOrder = $_SESSION['data_order']['list_cart_order'];
+                $newOrderId = $this->modelPayment->inserNewOrder($order_code, $user_id, $customer_name, $shipping_address, $customer_email, $customer_phone, $payment_method_id, $voucher_id, $shipping);
+                if (!empty($voucher_id)) {
+                    $this->modelPayment->changeQuantityVoucher($voucher_id);
                 }
+                foreach ($listProductAddOrder as $key => $item) {
+                    $this->modelPayment->insertOrderDetail($item['product_id'], $newOrderId, $item['variant_id'], $item['quantity'], $item['size'], $item['promotion_price']);
+                    $this->modelCart->deleteCartId($item['id']);
+                    $this->modelPayment->changeQuantityById($item['variant_id'], $item['size_id'], $item['quantity']);
+                }
+                $listCartById = $this->modelCart->getAllCartByUserId($_SESSION['user']['id']); // reload lại só lượng sản phẩm trong giỏ hàng của user
+                $_SESSION['count_cart'] = count($listCartById);
+                $_SESSION['success'] = 'Đặt hàng thành công';
+                unset($_SESSION['data_order']);
+                header('location:' . BASE_URL . '?act=view-order-detail&order_id=' . $newOrderId);
+                exit();
             }
 
             if ($_POST['payment_method_id'] == 2) {
-
-
-
                 $listOrder = $_SESSION['data_order']['list_cart_order'];
                 $sumPriceInOrder = 0;
                 foreach ($listOrder as $key => $item) {
@@ -215,10 +203,11 @@ class paymentController
     }
     public function returnByPayment()
     {
-        if ($_GET['vnp_TransactionStatus'] !== 0) {
-            // debug($_SESSION['data_order']['data_customer_check_out']);
+        if ($_GET['vnp_ResponseCode'] == 0) {
+
             $infoOrder = $_SESSION['data_order']['data_customer_check_out'];
             $listProductAddOrder = $_SESSION['data_order']['list_cart_order'];
+
             $shipping_address = $infoOrder['address'] . ', ' . $infoOrder['ward'] . ', ' . $infoOrder['district'] . ', ' . $infoOrder['city'];
             if (isset($infoOrder['voucher_id'])) {
                 $voucher_id = $infoOrder['voucher_id'];
@@ -239,11 +228,9 @@ class paymentController
             $_SESSION['count_cart'] = count($listCartById);
             $_SESSION['success'] = 'Đặt hàng thành công';
             unset($_SESSION['data_order']);
-            header('location:' . BASE_URL);
+            header('location:' . BASE_URL . '?act=view-order-detail&order_id=' . $newOrderId);
             exit();
-
-
-
+        } else {
             header('location:' . BASE_URL . '?act=view-cart');
             exit();
         }

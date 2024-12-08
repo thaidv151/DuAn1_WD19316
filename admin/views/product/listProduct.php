@@ -49,7 +49,7 @@ require_once './views/layouts/sidebar.php';
                   </td>
 
                   <td>
-                    <a style="text-decoration: none; color:black" class="fs-5" href="<?= BASE_URL . '?act=product-detail&id=' .$product['id'] . '&variant_id='. $product['variant_id'] ?>">
+                    <a style="text-decoration: none; color:black"  href="<?= BASE_URL . '?act=product-detail&id=' .$product['id'] . '&variant_id='. $product['variant_id'] ?>">
                     <?= $product['product_name'] ?>
                     </a>
                     

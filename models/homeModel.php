@@ -12,7 +12,32 @@ class modelHome
         try {
             $sql = "SELECT * FROM products 
             WHERE status = 1
-            ORDER BY view desc ";
+            ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllProductViewDesc()
+    {
+        try {
+            $sql = "SELECT * FROM products 
+            WHERE status = 1
+            ORDER BY view desc LIMIT 4";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getAllCategories()
+    {
+        try {
+            $sql = "SELECT * FROM categories " ;
+         
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();

@@ -6,7 +6,7 @@
 </div>
 <section class="flat-spacing-11">
     <div class="container">
-        <form class="tf-page-cart-checkout widget-wrap-checkout" action="<?= BASE_URL . '?act=post-check-out' ?>" method="POST">
+        <form id="frmCheckOut" class="tf-page-cart-checkout widget-wrap-checkout" action="<?= BASE_URL . '?act=post-check-out' ?>" method="POST">
             <div class="tf-page-cart-wrap layout-2">
                 <div class="tf-page-cart-item card p-3">
                     <h5 class="fw-5 mb_20">Thông tin người nhận</h5>
@@ -14,25 +14,30 @@
 
                     <fieldset class="fieldset">
                         <label for="first-name">Họ và tên </label>
-                        <input name="customer_name" type="text" id="first-name" placeholder="Nguyen Van A">
+                        <p class="text-danger" id="error-first-name"></p>
+                        <input name="customer_name" type="text" id="first-name" placeholder="Nguyen Van A" value="<?= $_SESSION['user']['username'] ?>">
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="last-name">Email</label>
-                        <input name="customer_email" type="text" id="last-name" placeholder="Example@gmail.com">
+                        <p class="text-danger" id="error-email"></p>
+                        <input name="customer_email" type="text" id="email" placeholder="Example@gmail.com" value="<?= $_SESSION['user']['email'] ?>">
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="phone">Số điện thoại</label>
-                        <input name="customer_phone" type="text" id="last-name" placeholder="***********343">
+                        <p class="text-danger" id="error-phone"></p>
+                        
+                        <input name="customer_phone" type="text" id="phone" placeholder="***********343" value="<?= $_SESSION['user']['phone'] ?>">
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="">Tỉnh thành</label>
+                        <p class="text-danger" id="error-city"></p>
                         <select class="form-control" name="city" id="city">
                             <option value="" selected>Chọn tỉnh thành</option>
                         </select>
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="">Quận huyện</label>
-
+                        <p class="text-danger" id="error-district"></p>
                         <select class="form-control" name="district" id="district">
                             <option value="" selected>Chọn quận huyện</option>
                         </select>
@@ -40,14 +45,15 @@
 
                     <fieldset class="fieldset">
                         <label for="">Phường xã</label>
-
+                        <p class="text-danger" id="error-ward"></p>
                         <select class="form-control" name="ward" id="ward">
                             <option value="" selected>Chọn phường xã</option>
                         </select>
                     </fieldset>
                     <fieldset class="box fieldset">
                         <label for="city">Địa chỉ</label>
-                        <input name="address" type="text" placeholder="Số nhà 2, ngõ ...">
+                        <p class="text-danger" id="error-address"></p>
+                        <input name="address" type="text" id="address" placeholder="Số nhà 2, ngõ ...">
                     </fieldset>
                 </div>
                 <div class="tf-page-cart-footer">
@@ -116,7 +122,7 @@
                             </select>
 
                         </div>
-                        <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Đặt hàng</button>
+                        <p id="handleSubmit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Đặt hàng</p>
 
                     </div>
                 </div>
@@ -129,7 +135,7 @@
 <script>
     const totalPriceOrder = document.querySelector('#totalPriceOrder');
     let dataTotalPrice = <?= json_encode($totalPriceOrder) ?>;
-    console.log(dataTotalPrice);
+    
     totalPriceOrder.innerText = dataTotalPrice.toLocaleString('it-IT', {
         style: 'currency',
         currency: 'VND'
@@ -160,7 +166,75 @@
         }
     }
 </script>
+<script>
+    const handleSubmit = document.querySelector('#handleSubmit');
+    handleSubmit.addEventListener('click', () => {
+        const isValid = true;
 
+        const address = document.querySelector('#address').value;
+        const ward = document.querySelector('#ward').value;
+        const district = document.querySelector('#district').value;
+        const city = document.querySelector('#city').value;
+        const email = document.querySelector('#email').value;
+        const phone = document.querySelector('#phone').value;
+        const firstName = document.querySelector('#first-name').value;
+        
+        const errorFirstName = document.querySelector('#error-first-name');
+        const errorEmail = document.querySelector('#error-email');
+        const errorPhone = document.querySelector('#error-phone');
+        const errorDistrict = document.querySelector('#error-district');
+        const errorWard = document.querySelector('#error-ward');
+        const errorCity = document.querySelector('#error-city');
+        if(!firstName){
+            errorFirstName.innerText = 'Không để trống tên người nhận';
+            isValid = false;
+        }else{
+            errorFirstName.innerText = '';
+        }
+        const regexEmail = /^[^s@]+@[^s@]+.[^s@]+$/;
+        if(!email){
+            errorEmail.innerText = 'Không để trống email';
+            isValid = false;
+        }else if(!regexEmail.test(email)){
+            errorEmail.innerText = 'Email không hợp lệ';
+            isValid = false;
+        }else{
+            errorEmail.innerText = '';
+        }
+        const regexPhone = /^[^1-9]+[0-9]{7,14}$/;
+        if(!phone){
+            errorPhone.innerText = 'Không để trống số điện thoại';
+            isValid =false;
+        }else if(!regexPhone.test(phone)){
+            errorPhone.innerText = 'Số điện thoại không hợp lệ';
+            isValid =false;
+        }else{
+            errorPhone.innerText = '';
+        }
+        if(!city){
+            errorCity.innerText = 'Không để trống thành phố';
+            isValid =false;
+        }else{
+            errorCity.innerText = '';
+        }
+        if(!ward){
+            errorWard.innerText = 'Không để trống phường xã';
+            isValid =false;
+        }else{
+            errorWard.innerText = '';
+        }
+        if(!district){
+            errorDistrict.innerText = 'Không để trống quận huyện';
+            isValid =false;
+        }else{
+            errorDistrict.innerText = '';
+        }
+        if(isValid){
+            const frmCheckOut = document.querySelector('#frmCheckOut');
+            frmCheckOut.submit();
+        }
+    })
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
     var citis = document.getElementById("city");
@@ -215,4 +289,5 @@
             }
         };
     }
+    
 </script>

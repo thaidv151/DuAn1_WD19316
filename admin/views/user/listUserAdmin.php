@@ -38,7 +38,11 @@ require_once './views/layouts/sidebar.php';
                     <tbody>
                         <?php foreach ($listUserAdmin as $key => $user): ?>
                             <tr>
-                                <td><?= $user['username'] ?></td>
+                                <td>
+                                    <a style="text-decoration: none; color:black;" href="<?= BASE_URL . '?act=client-profile&user_id=' . $user['id']?>">
+                                    <?= $user['username'] ?>
+                                    </a>
+                                </td>
                                 <td><?= $user['email'] ?></td>
                                 <td><?= $user['phone'] ?></td>
                                 <td><?= $user['role_id'] === 0 ? 'Super Admin' : 'Admin' ?></td>

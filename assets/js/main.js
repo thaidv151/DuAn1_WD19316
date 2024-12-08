@@ -263,44 +263,7 @@
 
   /* range
   -------------------------------------------------------------------------*/
-  var rangePrice = function(){
-    const rangeInput = document.querySelectorAll('.range-input input')
-    const progress = document.querySelector('.progress-price')
-    const minPrice = document.querySelector('.min-price')
-    const maxPrice = document.querySelector('.max-price')
 
-    let priceGap = 10
-
-    rangeInput.forEach(input => {
-        input.addEventListener('input', e => {
-            let minValue = parseInt(rangeInput[0].value, 10)
-            let maxValue = parseInt(rangeInput[1].value, 10)
-
-            if (maxValue - minValue < priceGap) {
-                if (e.target.class === 'range-min') {
-                    rangeInput[0].value = maxValue - priceGap
-                } else {
-                    rangeInput[1].value = minValue + priceGap
-                }
-            } else {
-                progress.style.left = (minValue / rangeInput[0].max) * 100 + "%";
-                progress.style.right = 100 - (maxValue / rangeInput[1].max) * 100 + "%";
-            }
-
-            minPrice.innerHTML = minValue
-            maxPrice.innerHTML = maxValue
-
-            if (minValue >= 290) {
-                minPrice.innerHTML = 290
-            }
-
-            if (maxValue <= 10) {
-                maxPrice.innerHTML = 10
-            }
-        })
-    })
-
-  }
 
   /* sidebar mobile
   -------------------------------------------------------------------------*/

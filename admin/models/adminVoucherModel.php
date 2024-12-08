@@ -115,4 +115,30 @@ class adminVoucherModel
             echo $e->getMessage();
         }
     }
+    public function getAllOrderByVoucherId($id){
+        
+        try {
+            $sql = "SELECT * FROM orders WHERE voucher_id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function deleteVoucherById($id){
+        
+        try {
+            $sql = "DELETE FROM vouchers WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }
