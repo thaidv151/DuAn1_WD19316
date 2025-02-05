@@ -86,4 +86,19 @@ class adminUserModel{
             echo $e->getMessage();
            }
     }
+    public function getOrderProcessByUserId($user_id){
+        try {
+            $sql= "SELECT * FROM orders WHERE user_id = :user_id AND order_status_id <= 4";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(
+                [
+                    ':user_id' => $user_id,
+                    
+                ]
+            );
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           }
+    }
 }

@@ -61,14 +61,14 @@
                         <nav class="box-navigation text-center">
                             <ul class="box-nav-ul d-flex align-items-center justify-content-center gap-30">
                                 <li class="menu-item">
-                                    <a href="<?= BASE_URL ?>" class="item-link">Home</i></a>
+                                    <a href="<?= BASE_URL ?>" class="item-link">Trang chủ</i></a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="item-link" id="viewProduct">Products</a>
+                                    <a class="item-link" id="viewProduct">Sản phẩm</a>
 
                                 </li>
                                 <li class="menu-item">
-                                    <a class="item-link" id="viewHotsearch">Hot search</a>
+                                    <a class="item-link" id="viewHotsearch">Sản phẩm xem nhiều nhất</a>
 
                                 </li>
 
