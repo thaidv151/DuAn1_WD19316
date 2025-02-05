@@ -16,7 +16,7 @@ class adminUserController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $user = $_SESSION['user'];
-          
+
 
             $oldPassword = $_POST['oldPassword'] ?? '';
             $newPassword = $_POST['newPassword'] ?? '';
@@ -90,12 +90,12 @@ class adminUserController
                     $newAvatar = $user['avatar'];
                 }
                 $user_id = $this->modelUser->updateUser($user['id'], $username, $phone, $date_of_birth, $gender, $newAvatar, $newPass);
-               
+
                 $_SESSION['user'] = $this->modelUser->getUserById($user_id);
                 $_SESSION['success'] = 'Cập nhật thành công';
                 header('location:' . BASE_URL_ADMIN . '?act=edit-profile');
                 exit();
-            }else{
+            } else {
                 $_SESSION['error'] = $errors;
                 $_SESSION['flash'] = true;
                 header('location:' . BASE_URL_ADMIN . '?act=edit-profile');
@@ -103,57 +103,72 @@ class adminUserController
             }
         }
     }
-    public function listUserAdmin(){
+    public function listUserAdmin()
+    {
         $listUserAdmin = $this->modelUser->getAllUserAdmin();
         require_once './views/user/listUserAdmin.php';
         delteSessionError();
     }
-    public function changeRole(){
+    public function changeRole()
+    {
         $user_id = $_GET['user_id'];
         $user = $this->modelUser->getUserById($user_id);
-        if($user['role_id'] === 1){
+        if ($user['role_id'] === 1) {
             $newRoleId = 2;
-        }else{
+        } else {
             $newRoleId = 1;
         }
         $success = $this->modelUser->changeRole($user_id, $newRoleId);
-        if($success){
-            $_SESSION['success'] = 'Thay đổi quyền hạng cho '. $user['username'] . ' thành công!!';
+        if ($success) {
+            $_SESSION['success'] = 'Thay đổi quyền hạng cho ' . $user['username'] . ' thành công!!';
             header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
             exit();
-        }else{
-            $_SESSION['success'] = 'Thay đổi quyền hạng cho '. $user['username'] . ' thất bại!!';
+        } else {
+            $_SESSION['success'] = 'Thay đổi quyền hạng cho ' . $user['username'] . ' thất bại!!';
             header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
             exit();
         }
     }
-    public function changeStatusUser(){
+    public function changeStatusUser()
+    {
         $user_id = $_GET['user_id'];
         $from = $_GET['from'] ?? '';
         $user = $this->modelUser->getUserById($user_id);
-        if($user['status'] === 1){
-            $newStatus = 0;
-        }else{
-            $newStatus = 1;
-        }
-        
-        $success = $this->modelUser->changeStatusUser($user_id, $newStatus);
-        if($success){
-            $_SESSION['success'] = 'Thay đổi trạng thái cho '. $user['username'] . ' thành công!!';
-            if(!empty($from)){
+        $listOrderProcess = $this->modelUser->getOrderProcessByUserId($user_id);
+        if (!empty($listOrderProcess)) {
+            if (!empty($from)) {
+                $_SESSION['success'] = 'Tài khoản đang có đơn hàng chưa xử lý không thể vô hiệu hoá!!';
                 header('location:' . BASE_URL_ADMIN . '?act=list-user-client');
                 exit();
+            }
+            $_SESSION['success'] = 'Tài khoản đang có đơn hàng chưa xử lý không thể vô hiêuh hoá!!';
+            header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
             exit();
+        }
+        if ($user['status'] === 1) {
+            $newStatus = 0;
+        } else {
+            $newStatus = 1;
+        }
+
+        $success = $this->modelUser->changeStatusUser($user_id, $newStatus);
+        if ($success) {
+            $_SESSION['success'] = 'Thay đổi trạng thái cho ' . $user['username'] . ' thành công!!';
+            if (!empty($from)) {
+                header('location:' . BASE_URL_ADMIN . '?act=list-user-client');
+                exit();
+                exit();
             }
             header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
             exit();
-        }else{
-            $_SESSION['success'] = 'Thay đổi trạng thái cho '. $user['username'] . ' thất bại!!';
+        } else {
+            $_SESSION['success'] = 'Thay đổi trạng thái cho ' . $user['username'] . ' thất bại!!';
             header('location:' . BASE_URL_ADMIN . '?act=list-user-admin');
             exit();
         }
     }
-    public function listUserClient(){
+    public function listUserClient()
+    {
         $listUserAdmin = $this->modelUser->getAllUserClient();
         require_once './views/user/listUserClient.php';
         delteSessionError();
