@@ -11,7 +11,14 @@ class HomeController
     }
     public function home()
     {
+       
+        
         $listProductDefault = $this->modelHome->getAllProduct();
+        if(isset($_GET['category'])){
+            $category_id =  $this->modelHome->getCategoryId($_GET['category'] ?? "");
+            $listProductDefault = $this->modelHome->getFilterProductByCategoryId($category_id['id']);
+        }
+      
         $listProduct = $listProductDefault;
         if(isset($_SESSION['user'])){
             $listCartById = $this->modelCart->getAllCartByUserId($_SESSION['user']['id']);
@@ -53,6 +60,8 @@ class HomeController
             $listProduct[$key]['promotion_price'] = $variant[0]['promotion_price'];
             $listProduct[$key]['album_product'] = $variant;
         }
+        
+        
         $listBanner = $this->modelHome->getAllBanner();
         $listCategories = $this->modelHome->getAllCategories();
         require './views/products/homeView.php';
@@ -91,7 +100,7 @@ class HomeController
         $listCategoryById = $this->modelHome->getAllCategoryByProductId($product_id);
         $listSuggestedProducts = [];
         foreach ($listCategoryById as $key => $item) {
-            $listSuggestedProducts[] =  $this->modelHome->getALlProductByCategoryId($item['category_id']);
+            $listSuggestedProducts[] =  $this->modelHome->getALlProductByCategoryId($item['category_id'], $product_id);
         }
         $filterSuggestedProducts = [];
 
@@ -113,6 +122,8 @@ class HomeController
                 $lastProductFilter[$key]['disscount_value'] = 0;
             }
         }
+
+
 
         $listReviews = $this->modelHome->getAllReviewByProductId($product_id); // lấy ra danh sách các đánh giá của sản phẩm
         $totalRating = 0;

@@ -20,12 +20,29 @@ class modelHome
             echo $e->getMessage();
         }
     }
+    public function getFilterProductByCategoryId($category_id)
+    {
+        try {
+            $sql = "SELECT p.id, p.product_name, p.product_description, p.view, p.status, cd.category_id 
+            FROM products as p
+            JOIN category_details as cd on cd.product_id = p.id
+            WHERE p.status = 1 AND cd.category_id = :category_id
+            ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ":category_id" => $category_id
+            ]);
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
     public function getAllProductViewDesc()
     {
         try {
             $sql = "SELECT * FROM products 
             WHERE status = 1
-            ORDER BY view desc LIMIT 4";
+            ORDER BY created_at desc LIMIT 10";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -36,8 +53,8 @@ class modelHome
     public function getAllCategories()
     {
         try {
-            $sql = "SELECT * FROM categories " ;
-         
+            $sql = "SELECT * FROM categories ";
+
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -135,16 +152,18 @@ class modelHome
             echo $e->getMessage();
         }
     }
-    public function getAllProductByCategoryId($id)
+    public function getAllProductByCategoryId($id, $product_id)
     {
         try {
             $sql = "SELECT * FROM category_details 
            INNER JOIN products on products.id = category_details.product_id
-            WHERE category_id = :id
+            WHERE category_id = :id AND product_id != :product_id
             ";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ':id' => $id,
+                ':product_id' => $product_id,
+
             ]);
             return $stmt->fetchAll();
         } catch (Exception $e) {
@@ -167,6 +186,21 @@ class modelHome
             echo $e->getMessage();
         }
     }
+    public function getCategoryId($name)
+    {
+        try {
+            $sql = "SELECT id FROM categories 
+            WHERE category_name = :name
+            ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':name' => $name,
+            ]);
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
     public function insertComment($user_id, $product_id, $content)
     {
         $sql = "INSERT INTO comments (product_id, user_id, content, created_at) VALUES (:product_id, :user_id, :content, now())";
@@ -179,7 +213,8 @@ class modelHome
         ]);
         return true;
     }
-    public function getAllReviewByProductId($id){
+    public function getAllReviewByProductId($id)
+    {
         try {
             $sql = "SELECT  r.id, r.product_id, r.user_id, r.rating_star, r.content, r.variant_id, r.order_detail_id, r.created_at, v.color,v.thumbnail_variant, o.size, u.username, u.avatar FROM reviews as r
            INNER JOIN variants as v on v.id = r.variant_id
@@ -196,7 +231,8 @@ class modelHome
             echo $e->getMessage();
         }
     }
-    public function getAllBanner(){
+    public function getAllBanner()
+    {
         try {
             $sql = "SELECT * FROM banners ORDER BY number_order asc ";
             $stmt = $this->conn->prepare($sql);
@@ -206,7 +242,8 @@ class modelHome
             echo $e->getMessage();
         }
     }
-    public function countViewProduct($id){
+    public function countViewProduct($id)
+    {
         try {
             $sql = "UPDATE products SET view = view + 1 WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
@@ -218,7 +255,8 @@ class modelHome
             echo $e->getMessage();
         }
     }
-    public function changeStatusComment($id){
+    public function changeStatusComment($id)
+    {
         try {
             $sql = "UPDATE comments 
             SET status = CASE
@@ -235,7 +273,8 @@ class modelHome
             echo $e->getMessage();
         }
     }
-    public function deleteCommentById($id){
+    public function deleteCommentById($id)
+    {
         try {
             $sql = "DELETE FROM comments
             WHERE id = :id";
