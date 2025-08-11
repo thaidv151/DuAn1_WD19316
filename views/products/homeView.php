@@ -217,7 +217,7 @@
                     <ul class="list-categoris current-scrollbar mb_36">
                         <?php foreach ($listCategories as $key => $item): ?>
                             <li class="cate-item current">
-                                <a href="<?= BASE_URL . "?category=" . $item['category_name'] ?>"> <label><?= $item['category_name'] ?></label></a>
+                                <a href="<?= BASE_URL . "?category=" . $item['category_name'] ?>"><?= $item['category_name'] ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>

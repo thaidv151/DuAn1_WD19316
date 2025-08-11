@@ -34,7 +34,7 @@
                         'quantity' => $value
                     ];
                 };
-
+                debug($albums);
                 $thumbnails = $_FILES['thumbnail'];
                 $errors = [];
 
@@ -553,14 +553,14 @@
 
             $orderDetailById = $this->modelProduct->getAllOrderByVariantId($variant_id);
             $reviewById = $this->modelProduct->getAllReviewByVariantId($variant_id);
-          
+
             if (!empty($orderDetailById) || !empty($reviewById)) {
-               
+
                 $_SESSION['success'] = 'Biến thể có tương tác không thể xoá';
                 header('location:' . BASE_URL_ADMIN . '?act=list-product');
                 exit();
             }
-            
+
             $deleteAlbum = $this->modelProduct->deleteAlbumById($variant_id);
             $deleteSize = $this->modelProduct->deleteAllSizeById($variant_id);
             $deleteVariant = $this->modelProduct->deleteVariantById($variant_id);

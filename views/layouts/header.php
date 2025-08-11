@@ -68,7 +68,7 @@
 
                                 </li>
                                 <li class="menu-item">
-                                    <a class="item-link" id="viewHotsearch">Sản phẩm xem nhiều nhất</a>
+                                    <a class="item-link" id="viewHotsearch">Sản phẩm mới nhất</a>
 
                                 </li>
 
